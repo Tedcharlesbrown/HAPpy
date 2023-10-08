@@ -1,8 +1,18 @@
 import tkinter as tk
 from tkinter import filedialog
 import ffmpeg
-
 import os
+
+# Adjust these paths based on where you're keeping ffmpeg and ffprobe relative to your script
+current_directory = os.path.dirname(os.path.abspath(__file__))
+ffmpeg_bin = os.path.join(current_directory, 'FFMPEG')  # or 'ffmpeg/bin/ffmpeg' etc.
+ffprobe_bin = os.path.join(current_directory, 'FFMPEG')  # or 'ffmpeg/bin/ffprobe' etc.
+
+# Set the paths for ffmpeg-python
+ffmpeg._run.DEFAULT_FFMPEG_PATH = ffmpeg_bin
+ffmpeg._run.DEFAULT_FFPROBE_PATH = ffprobe_bin
+
+
 
 
 
