@@ -1,57 +1,66 @@
-import tkinter as tk
-from tkinter import filedialog
-import ffmpeg
 import os
 
-# Adjust these paths based on where you're keeping ffmpeg and ffprobe relative to your script
-current_directory = os.path.dirname(os.path.abspath(__file__))
-ffmpeg_bin = os.path.join(current_directory, 'FFMPEG')  # or 'ffmpeg/bin/ffmpeg' etc.
-ffprobe_bin = os.path.join(current_directory, 'FFMPEG')  # or 'ffmpeg/bin/ffprobe' etc.
+from src_tkinter.handle_files import select_file
+from src_tkinter.handle_files import select_folder
 
-# Set the paths for ffmpeg-python
-ffmpeg._run.DEFAULT_FFMPEG_PATH = ffmpeg_bin
-ffmpeg._run.DEFAULT_FFPROBE_PATH = ffprobe_bin
+from src_ffmpeg.encode import encode_to_hap
 
-
-
-
-
-def select_file():
-    root = tk.Tk()
-    root.withdraw()  # Hide the main window
-    filepath = filedialog.askopenfilename(title="Select a file")
-    return filepath
-
-def select_folder():
-    root = tk.Tk()
-    root.withdraw()  # Hide the main window
-    folderpath = filedialog.askdirectory(title="Select a destination folder")
-    return folderpath
-
-def encode_to_hap(input_path, output_path):
-    # Note: the exact FFmpeg command might vary based on the specific FFmpeg build and HAP variant.
-    # The example below is for HAP Q encoding
-    stream = ffmpeg.input(input_path)
-    stream = ffmpeg.output(stream, output_path, vcodec='hap', format='mov', compressor='snappy')
-    ffmpeg.run(stream)
-
-def main():
+def menu_select_input():
     input_path = select_file()
     if not input_path:
         print("No file selected. Exiting...")
         return
+    return input_path
 
-    destination_folder = select_folder()
-    if not destination_folder:
+def menu_select_input_folder():
+    folder_path = select_folder()
+    if not folder_path:
+        print("No folder selected. Exiting...")
+        return
+    # List all files in the folder
+    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    
+    # Optionally, you can filter for specific file types (e.g., only .mov files)
+    # files = [f for f in files if f.endswith('.mov')]
+
+    # Return full paths of all files
+    return [os.path.join(folder_path, f) for f in files]
+
+def menu_select_destination():
+    destination_path = select_folder()
+    if not destination_path:
         print("No destination folder selected. Exiting...")
         return
+    return destination_path
+
+def menu_select_source_file():
+    input_path = menu_select_input()
+    destination_path = menu_select_destination()
 
     base_name = os.path.basename(input_path)
     file_name, _ = os.path.splitext(base_name)
-    output_path = f"{destination_folder}/{file_name}_HAP.mov"
+    output_path = f"{destination_path}/{file_name}_HAP.mov"
 
     encode_to_hap(input_path, output_path)
     print(f"File saved to {output_path}")
+
+def menu_select_source_folder():
+    input_paths = menu_select_input_folder()
+    destination_folder = menu_select_destination()
+
+    # Iterate over each file in the selected folder
+    for input_path in input_paths:
+        base_name = os.path.basename(input_path)
+        file_name, _ = os.path.splitext(base_name)
+        output_path = f"{destination_folder}/{file_name}_HAP.mov"
+        
+        encode_to_hap(input_path, output_path)
+        print(f"File saved to {output_path}")
+
+
+def main():
+    menu_select_source_folder()
+    
 
 if __name__ == "__main__":
     main()
