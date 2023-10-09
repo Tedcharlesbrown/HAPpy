@@ -12,7 +12,7 @@ ffmpeg._run.DEFAULT_FFPROBE_PATH = ffprobe_bin
 
 def encode_to_hap(input_path, output_path):
     # Note: the exact FFmpeg command might vary based on the specific FFmpeg build and HAP variant.
-    # The example below is for HAP Q encoding
+    # The example below is for HAP encoding
     stream = ffmpeg.input(input_path)
     stream = ffmpeg.output(stream, output_path, vcodec='hap', format='mov', compressor='snappy')
     ffmpeg.run(stream)
