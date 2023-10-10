@@ -33,11 +33,13 @@ class App:
         self.setup_treeview(x=20, y=150, width=350, height=300)
 
         # Destination Drag and Drop Area
-        self.setup_drop_area(x=20, y=470, width=350, height=60, label_text="Click here to select a destination", func=self.open_folder_dialog)
+        # self.setup_drop_area(x=20, y=470, width=350, height=60, label_text="Click here to select a destination", func=self.open_folder_dialog)
+        self.setup_drop_area(x=430, y=80, width=350, height=60, label_text="Click here to select a destination", func=self.open_folder_dialog)
 
         # Frame to display the selected destination folder
         self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
-        self.destination_label.place(x=20, y=540, width=350, height=40)
+        # self.destination_label.place(x=20, y=540, width=350, height=40)
+        self.destination_label.place(x=430, y=80+70, width=350, height=40)
         self.destination_label.drop_target_register(DND_FILES)
         self.destination_label.dnd_bind('<<Drop>>', self.drop)
         self.destination_label.bind('<Button-1>', self.open_folder_dialog)
@@ -45,8 +47,7 @@ class App:
         # Checkboxes
         self.setup_checkboxes()
 
-        # Dropdown for codec options
-        self.setup_dropdown()
+        # self.setup_dropdown()
 
         self.setup_progressbar()
 
