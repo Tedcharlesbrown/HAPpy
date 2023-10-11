@@ -84,14 +84,6 @@ def encode_to_hap(input_path, output_path, mode="pad", callback=None):
 
 
 
-
-
-
-
-
-
-
-
 def encode_to_hap_half(input_path, output_path):
     # The example below is for HAP Q encoding with half resolution
     stream = ffmpeg.input(input_path)
