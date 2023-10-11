@@ -6,7 +6,7 @@ import threading
 import queue
 import time
 
-from src_ffmpeg.encode import encode_to_hap
+from encode import encode_to_hap
 
 
 class App:
