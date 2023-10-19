@@ -90,10 +90,6 @@ def configure_styles(self):
             selectbackground=[('readonly', "#555555")],
             selectforeground=[('readonly', "#555555")])
 
-    # Configure style for the button
-    # style.configure("Dark.TButton", background="#555555", foreground="#FFFFFF", font=("Arial", 14), relief="raised", padding=(20, 10))
-    # style.map("Dark.TButton", background=[('pressed', '#333333'), ('active', '#444444')])
-
     style.layout('text.Horizontal.TProgressbar', 
                         [('Horizontal.Progressbar.trough',
                         {'children': [('Horizontal.Progressbar.pbar',
@@ -101,6 +97,14 @@ def configure_styles(self):
                         'sticky': 'nswe'}), 
                         ('Horizontal.Progressbar.label', {'sticky': 'nswe'})])
     style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_background, background='green', borderwidth=0)
+    
+    style.configure("Dialog.TLabel", background=self.style_background, foreground="#FFFFFF")
+    style.configure("Dialog.TButton", background="black", foreground="white", relief="flat", padding=(0), borderwidth=0)
+    style.map("Dialog.TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
+
+
+    
+
 
 
 # ---------------------------------------------------------------------------- #
@@ -292,9 +296,74 @@ def setup_dropdown(self):
     dropdown.place(x=470, y=325)
 
 
+
+
 def update_progress_text(self, text):
     self.style.configure('text.Horizontal.TProgressbar', text=text)
 
 def console_log_progress(self, percentage):
     self.progress["value"] = percentage
     print(f"Progress: {percentage:.2f}%")
+
+
+# ---------------------------------------------------------------------------- #
+#                            OVERWRITE CONFIRMATION                            #
+# ---------------------------------------------------------------------------- #
+
+def ask_overwrite_confirmation(self):
+    dialog = tk.Toplevel(self.root)
+    dialog.title("Overwrite Confirmation")
+
+    # Set the size of the dialog
+    dialog.geometry("350x200")  # Width x Height
+    # Set the dialog's background color
+    dialog.configure(bg="#1a1a1a")
+
+    # Make the dialog non-resizable
+    dialog.resizable(False, False)
+    
+    # Use the custom style for the label inside the dialog
+    msg = ttk.Label(dialog, text="The file already exists. Do you want to overwrite it?", style="Dialog.TLabel")
+    msg.pack(pady=10, padx=10)
+    
+    overwrite_all_var = tk.IntVar()
+    
+    def on_yes():
+        dialog.result = (True, overwrite_all_var.get())
+        dialog.destroy()
+
+    def on_no():
+        dialog.result = (False, overwrite_all_var.get())
+        dialog.destroy()
+
+    yes_all_btn = ttk.Button(dialog, text="Yes to all", command=on_yes, style="Dialog.TButton")
+    yes_all_btn.pack(side="left", padx=10)
+
+    yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton")
+    yes_btn.pack(side="left", padx=10)
+
+    no_btn = ttk.Button(dialog, text="No", command=on_no, style="Dialog.TButton")
+    no_btn.pack(side="right", padx=10)
+
+    # Force the dialog to update its layout and dimensions
+    dialog.update_idletasks()
+
+    # Center the dialog relative to its parent
+    parent_x = self.root.winfo_x()
+    parent_y = self.root.winfo_y()
+    parent_width = self.root.winfo_width()
+    parent_height = self.root.winfo_height()
+
+    dialog_width = dialog.winfo_width()
+    dialog_height = dialog.winfo_height()
+
+    dialog_x = parent_x + (parent_width // 2) - (dialog_width // 2)
+    dialog_y = parent_y + (parent_height // 2) - (dialog_height // 2)
+
+    dialog.geometry(f"+{dialog_x}+{dialog_y}")
+
+    dialog.lift()
+    dialog.grab_set()
+    dialog.wait_window()
+    return dialog.result
+

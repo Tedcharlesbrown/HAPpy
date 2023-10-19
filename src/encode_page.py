@@ -30,6 +30,7 @@ def on_encode_click(self, selected):
     # Count the total files to encode
     self.total_files = len(all_files_to_encode)
     print(f"Total number of files to encode: {self.total_files}")
+    print(self.ask_overwrite_confirmation())
 
     # Now you can send them to the encoder
     for file_path in all_files_to_encode:

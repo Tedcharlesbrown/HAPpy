@@ -1,5 +1,6 @@
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from src import HAPPY
+import time
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
@@ -11,5 +12,5 @@ if __name__ == "__main__":
     root.configure(bg="#2E2E2E")  # Dark background color
     app = HAPPY(root)
 
-
+    # print(app.ask_overwrite_confirmation())
     root.mainloop()
