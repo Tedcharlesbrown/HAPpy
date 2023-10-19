@@ -3,6 +3,10 @@ from tkinter import ttk, filedialog, PhotoImage, font
 from functools import partial
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
+# ---------------------------------------------------------------------------- #
+#                                   SETUP UI                                   #
+# ---------------------------------------------------------------------------- #
+
 def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
     self.bg = PhotoImage(file = "GUI/assets/background.png") 

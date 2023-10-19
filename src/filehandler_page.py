@@ -1,7 +1,11 @@
 import os
 from tkinter import ttk, filedialog, PhotoImage, font
 
+# ---------------------------------------------------------------------------- #
+#                                 INPUT METHODS                                #
+# ---------------------------------------------------------------------------- #
 
+# --------------------------- FILE OR FOLDER DIALOG -------------------------- #
 def open_file_or_folder_dialog(self, button, event=None):
     """Opens a file or folder dialog based on which label was clicked."""
     paths = ""
@@ -16,6 +20,7 @@ def open_file_or_folder_dialog(self, button, event=None):
         for path in paths:
             self.display_input_tree(path)  # Send each individual file path to be displayed
 
+# ----------------------------- IMPORT FILE TREE ----------------------------- #
 def display_input_tree(self, folder_path):
     """Displays the file tree of the specified folder in the Treeview."""
     # -------------------- REMOVE INITIAL PROMPT ------------------- #

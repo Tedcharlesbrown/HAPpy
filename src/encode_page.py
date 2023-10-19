@@ -4,6 +4,10 @@ import time
 
 from encode import encode_to_hap
 
+# ---------------------------------------------------------------------------- #
+#                                    ENCODE                                    #
+# ---------------------------------------------------------------------------- #
+
 def on_encode_click(self, selected):
     """Handles the encode button click event."""
     self.elapsed_files = 1
