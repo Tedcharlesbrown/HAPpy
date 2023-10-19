@@ -63,32 +63,17 @@ class App:
         self.setup_encode_buttons(25,540,0,0,"Encode Selected",encode_selected,image_path="GUI/assets/Button_EncodeSelected.png")
         self.setup_encode_buttons(204,540,0,0,"Encode All",encode_all,image_path="GUI/assets/Button_EncodeAll.png")
 
-
-
         # ---------------------------------------------------------------------------- #
         #                                 PROGRESS BAR                                 #
         # ---------------------------------------------------------------------------- #
-        self.setup_progressbar()
+        self.setup_progressbar(25,480,350,40,image_path="GUI/assets/progressbar.png")
 
-
-        # Frame to display the selected destination folder
-        # self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
-        # self.destination_label.place(x=430, y=80+70, width=350, height=40)
-        # self.destination_label.drop_target_register(DND_FILES)
-        # self.destination_label.dnd_bind('<<Drop>>', self.drop)
-        # self.destination_label.bind('<Button-1>', self.open_folder_dialog)
-
-        # Checkboxes
+        # ---------------------------------------------------------------------------- #
+        #                                  CHECKBOXES                                  #
+        # ---------------------------------------------------------------------------- #
         # self.setup_checkboxes()
 
         # self.setup_dropdown()
-
-
-        # Encode Button
-        # button_encode_selected = ttk.Button(self.root, text="Encode Selected", style="encode_selected.TButton", command=lambda: self.on_encode_click(True))
-        # button_encode_selected.place(x=425, y=470)
-        # button_encode_all = ttk.Button(self.root, text="Encode ALL", style="encode_all.TButton", command=lambda: self.on_encode_click(False))
-        # button_encode_all.place(x=609, y=470)
 
     def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -113,9 +98,9 @@ class App:
         self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf", size=12)
 
         # -------------------------------- INPUT TREE -------------------------------- #
-        style.configure("Treeview", background="5E5E5E", foreground="#FFFFFF", fieldbackground="#1a1a1a", relief="flat", padding=(0, 3), borderwidth=0, font=self.font)
+        style.configure("Treeview", background="5E5E5E", foreground="#FFFFFF", fieldbackground="#1a1a1a", relief="flat", padding=(0, 3), borderwidth=0)#, font=self.font)
         # -------------------------------- OUTPUT TREE ------------------------------- #
-        style.configure("Destination.TLabel", background="#1a1a1a", foreground="#FFFFFF", padding=10, relief="flat", borderwidth=0, font=self.font)   
+        style.configure("Destination.TLabel", background="#1a1a1a", foreground="#FFFFFF", padding=10, relief="flat", borderwidth=0)#, font=self.font)   
         # ---------------------------------------------------------------------------- #
         #                                    ENCODE                                    #
         # ---------------------------------------------------------------------------- #
@@ -152,7 +137,7 @@ class App:
                                           {'side': 'left', 'sticky': 'ns'})],
                             'sticky': 'nswe'}), 
                           ('Horizontal.Progressbar.label', {'sticky': 'nswe'})])
-        style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_progressbar_background, background='green')
+        style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_background, background='green', borderwidth=0)
 
     def setup_button(self, x, y, width, height, label_text, func, image_path=None):
         if image_path:
@@ -221,8 +206,7 @@ class App:
             self.image = None
         
         self.button_encode = ttk.Button(self.root, text=label_text, style="TButton", command=func, image=self.image)
-
-        
+ 
         if self.image:
             self.button_encode.image = self.image  # Keep a reference to prevent garbage collection
 
@@ -296,21 +280,34 @@ class App:
         dropdown.place(x=470, y=325)
 
 
-    def setup_progressbar(self):
-        progressbar_width = 350
-        progressbar_height = 40
-        canvas_width = progressbar_width
-        canvas_height = progressbar_height  # Increase height for status text
-        
-        progressbar_x = 425
-        progressbar_y = 540
+    def setup_progressbar(self,x,y,width,height,image_path=None):
+        if image_path:
+            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            # Retrieve the width and height from the image
+            width = self.image.width()
+            height = self.image.height()
+        else:
+            self.image = None
+    
+        self.progressbar_image = tk.Label(self.root, image=self.image)
+        self.progressbar_image.place(x=x, y=y, width=width, height=height)
 
-        self.canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bd=0, highlightthickness=0)
-        self.canvas.place(x=progressbar_x, y=progressbar_y)
+        if self.image:
+            self.progressbar_image = self.image  # Keep a reference to prevent garbage collection
+
+        offset = 6
+
+        x = x + offset / 2
+        y = y + offset / 2
+        width = width - offset
+        height = height - offset
+    
+        self.canvas = tk.Canvas(root, width=width, height=height, bd=0, highlightthickness=0)
+        self.canvas.place(x=x, y=y)
 
         # Use the custom style for the progress bar
-        self.progress = ttk.Progressbar(self.canvas, orient=tk.HORIZONTAL, style="text.Horizontal.TProgressbar", length=progressbar_width, mode='determinate')
-        self.canvas.create_window(canvas_width/2, canvas_height/2, window=self.progress, width=progressbar_width, height=progressbar_height)
+        self.progress = ttk.Progressbar(self.canvas, orient=tk.HORIZONTAL, style="text.Horizontal.TProgressbar", length=width, mode='determinate')
+        self.canvas.create_window(width/2, height/2, window=self.progress, width=width, height=height)
 
 
     def update_progress_text(self, text):
@@ -352,8 +349,6 @@ class App:
                     self.parent_folder = os.path.basename(os.path.normpath(file_path))
                 else:  # It's a file, hence set the folder containing the file as the parent.
                     self.parent_folder = os.path.basename(os.path.dirname(file_path))
-
-
 
     def open_folder_dialog(self, event):
         """Opens a folder dialog based on which label was clicked."""
