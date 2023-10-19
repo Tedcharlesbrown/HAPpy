@@ -1,19 +1,23 @@
 import os
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, PhotoImage, font
+from PIL import ImageFont
+from tkinter import Entry
 from tkinterdnd2 import DND_FILES, TkinterDnD
 import threading
 import queue
 import time
+from functools import partial
+
 
 from encode import encode_to_hap
 
 
 class App:
     def __init__(self, root):
+        self.root = root
         self.encode_queue = queue.Queue()
         self.encode_lock = threading.Lock()
-        self.root = root
         self.codec_option = tk.StringVar()  # Move this line here
         self.configure_styles()
         self.setup_ui()
@@ -25,69 +29,101 @@ class App:
         self.job_is_complete = False
 
     def setup_ui(self):
-        # Source Drag and Drop Area
-        self.setup_drop_area(x=20, y=80, width=170, height=60, label_text="Click here to select a file", func=self.open_file_dialog)
-        self.setup_drop_area(x=200, y=80, width=170, height=60, label_text="Click here to select a folder", func=self.open_folder_dialog)
+        # ---------------------------------------------------------------------------- #
+        #                                  BACKGROUND                                  #
+        # ---------------------------------------------------------------------------- #
+        self.bg = PhotoImage(file = "GUI/assets/background.png") 
+        self.background = ttk.Label( root, image = self.bg) 
+        self.background.place(x = 0, y = 0) 
+        # ---------------------------------------------------------------------------- #
+        #                                     INPUT                                    #
+        # ---------------------------------------------------------------------------- #
+        # ------------------------- Select A File & Select A Folder ------------------------ #
+        self.setup_button(x=25, y=20, width=0, height=0, label_text="Click here to select a file", func=self.open_file_dialog, image_path="GUI/assets/Button_SelectAFile.png")
+        self.setup_button(x=204, y=20, width=0, height=0, label_text="Click here to select a folder", func=self.open_folder_dialog, image_path="GUI/assets/Button_SelectAFolder.png")
 
-        # Treeview for displaying the file structure of the source
-        self.setup_treeview(x=20, y=150, width=350, height=300)
+        # --------------------------------- Tree View -------------------------------- #
+        self.setup_tree_input(x=27, y=83, width=349, height=295, image_path="GUI/assets/Tree_DropArea.png")
 
-        # Destination Drag and Drop Area
-        # self.setup_drop_area(x=20, y=470, width=350, height=60, label_text="Click here to select a destination", func=self.open_folder_dialog)
-        self.setup_drop_area(x=430, y=80, width=350, height=60, label_text="Click here to select a destination", func=self.open_folder_dialog)
+        # ---------------------- Clear Selection & Remove Files ---------------------- #
+
+        # ---------------------------------------------------------------------------- #
+        #                                  DESTINATION                                 #
+        # ---------------------------------------------------------------------------- #
+        # --------------------------- Select A Destination --------------------------- #
+        self.setup_button(x=430, y=20, width=350, height=40, label_text="Click here to select a destination", func=self.open_folder_dialog, image_path="GUI/assets/Button_SelectADestination.png")
+        # --------------------------------- Tree View -------------------------------- #
+        self.setup_tree_output(x=430, y=80, width=350, height=40, image_path="GUI/assets/Tree_Destination.png")
+
+        # ---------------------------------------------------------------------------- #
+        #                                    ENCODE                                    #
+        # ---------------------------------------------------------------------------- #
+        encode_selected = partial(self.on_encode_click, True)
+        encode_all = partial(self.on_encode_click, False)
+        self.setup_encode_buttons(25,540,0,0,"Encode Selected",encode_selected,image_path="GUI/assets/Button_EncodeSelected.png")
+        self.setup_encode_buttons(204,540,0,0,"Encode All",encode_all,image_path="GUI/assets/Button_EncodeAll.png")
+
+
+
+        # ---------------------------------------------------------------------------- #
+        #                                 PROGRESS BAR                                 #
+        # ---------------------------------------------------------------------------- #
+        self.setup_progressbar()
+
 
         # Frame to display the selected destination folder
-        self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
-        # self.destination_label.place(x=20, y=540, width=350, height=40)
-        self.destination_label.place(x=430, y=80+70, width=350, height=40)
-        self.destination_label.drop_target_register(DND_FILES)
-        self.destination_label.dnd_bind('<<Drop>>', self.drop)
-        self.destination_label.bind('<Button-1>', self.open_folder_dialog)
+        # self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
+        # self.destination_label.place(x=430, y=80+70, width=350, height=40)
+        # self.destination_label.drop_target_register(DND_FILES)
+        # self.destination_label.dnd_bind('<<Drop>>', self.drop)
+        # self.destination_label.bind('<Button-1>', self.open_folder_dialog)
 
         # Checkboxes
-        self.setup_checkboxes()
+        # self.setup_checkboxes()
 
         # self.setup_dropdown()
 
-        self.setup_progressbar()
 
         # Encode Button
-        # button_encode_selected = ttk.Button(self.root, text="Encode Selected", style="TButton", command=self.on_encode_click)
-        button_encode_selected = ttk.Button(self.root, text="Encode Selected", style="encode_selected.TButton", command=lambda: self.on_encode_click(True))
-        button_encode_selected.place(x=425, y=470)
-        button_encode_all = ttk.Button(self.root, text="Encode ALL", style="encode_all.TButton", command=lambda: self.on_encode_click(False))
-        button_encode_all.place(x=609, y=470)
+        # button_encode_selected = ttk.Button(self.root, text="Encode Selected", style="encode_selected.TButton", command=lambda: self.on_encode_click(True))
+        # button_encode_selected.place(x=425, y=470)
+        # button_encode_all = ttk.Button(self.root, text="Encode ALL", style="encode_all.TButton", command=lambda: self.on_encode_click(False))
+        # button_encode_all.place(x=609, y=470)
 
-    
+    def load_font(self, font_path, size=12):
+        # Register the font with tkinter's font factory
+        font_name = font.Font(font=font_path, size=size).actual()["family"]
+        return font_name
 
     def configure_styles(self):
+        # --------------------------------- VARIABLES -------------------------------- #
+        self.style_background = '#1a1a1a'
         self.style_progressbar_background = '#333333'
-        # Dark mode styling
-        style = ttk.Style()
-        self.style = ttk.Style(root)
-
-        style.theme_use("default")
-        style.configure("TLabel", background="#2E2E2E", foreground="#FFFFFF")
-
         self.style_button_background = "#555555"
         self.style_button_foreground = "#FFFFFF"
         self.style_button_pressed = "#444444"
         self.style_button_active = "#5E5E5E"
+        # ---------------------------------------------------------------------------- #
+        #                                  BACKGROUND                                  #
+        # ---------------------------------------------------------------------------- #
+        style = ttk.Style()
+        self.style = ttk.Style(root)
+        style.theme_use("default")
+        style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
+        self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf", size=12)
 
-        style.configure("encode_selected.TButton", background=self.style_button_background, foreground=self.style_button_foreground, relief="raised", padding=(37.5,20))
-        style.map("encode_selected.TButton", background=[('pressed', self.style_button_pressed), ('active', self.style_button_active)])
-        style.configure("encode_all.TButton", background=self.style_button_background, foreground=self.style_button_foreground, relief="raised", padding=(50,20))
-        style.map("encode_all.TButton", background=[('pressed', self.style_button_pressed), ('active', self.style_button_active)])
+        # -------------------------------- INPUT TREE -------------------------------- #
+        style.configure("Treeview", background="5E5E5E", foreground="#FFFFFF", fieldbackground="#1a1a1a", relief="flat", padding=(0, 3), borderwidth=0, font=self.font)
+        # -------------------------------- OUTPUT TREE ------------------------------- #
+        style.configure("Destination.TLabel", background="#1a1a1a", foreground="#FFFFFF", padding=10, relief="flat", borderwidth=0, font=self.font)   
+        # ---------------------------------------------------------------------------- #
+        #                                    ENCODE                                    #
+        # ---------------------------------------------------------------------------- #
+        # ------------------------------ ENCODE BUTTONS ------------------------------ #
+        style.configure("TButton", background=self.style_background, foreground=self.style_background, relief="flat", padding=(0), borderwidth=0)
+        style.map("TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
 
-        style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333")
-        style.configure("Treeview.Heading", background="#555555", foreground="#FFFFFF")
-        
-        # Configure the styling for the destination label
-        style.configure("Destination.TLabel", 
-                        background="#333333",    # Background color
-                        foreground="#FFFFFF",    # Foreground color (text color)
-                        padding=10,              # Padding around the text
-                        relief="sunken")         # Border type
+
         
         style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
         style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
@@ -107,8 +143,8 @@ class App:
                 selectforeground=[('readonly', "#555555")])
 
         # Configure style for the button
-        style.configure("Dark.TButton", background="#555555", foreground="#FFFFFF", font=("Arial", 14), relief="raised", padding=(20, 10))
-        style.map("Dark.TButton", background=[('pressed', '#333333'), ('active', '#444444')])
+        # style.configure("Dark.TButton", background="#555555", foreground="#FFFFFF", font=("Arial", 14), relief="raised", padding=(20, 10))
+        # style.map("Dark.TButton", background=[('pressed', '#333333'), ('active', '#444444')])
 
         style.layout('text.Horizontal.TProgressbar', 
                          [('Horizontal.Progressbar.trough',
@@ -118,12 +154,30 @@ class App:
                           ('Horizontal.Progressbar.label', {'sticky': 'nswe'})])
         style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_progressbar_background, background='green')
 
-    def setup_drop_area(self, x, y, width, height, label_text, func):
-        drop_area = tk.Label(self.root, bg='#555555', fg='#FFFFFF', relief="raised", text=label_text)
-        drop_area.place(x=x, y=y, width=width, height=height)
-        drop_area.drop_target_register(DND_FILES)
-        drop_area.dnd_bind('<<Drop>>', self.drop)
-        drop_area.bind('<Button-1>', func)
+    def setup_button(self, x, y, width, height, label_text, func, image_path=None):
+        if image_path:
+            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            # Retrieve the width and height from the image
+            width = self.image.width()
+            height = self.image.height()
+        else:
+            self.image = None
+
+        # drop_area = tk.Label(self.root, bg='#555555', fg='#FFFFFF', relief="raised", text=label_text, image=self.image)
+        self.button = ttk.Button(self.root, text=label_text, command=func,style="TButton", image=self.image)
+        
+        if self.image:
+            # drop_area.image = self.image  # Keep a reference to prevent garbage collection
+            self.button.image = self.image  # Keep a reference to prevent garbage collection
+
+        # drop_area.place(x=x, y=y, width=width, height=height)
+        # drop_area.drop_target_register(DND_FILES)
+        # drop_area.dnd_bind('<<Drop>>', self.drop)
+        # drop_area.bind('<Button-1>', func)
+        self.button.place(x=x, y=y, width=width, height=height)
+        self.button.drop_target_register(DND_FILES)
+        self.button.dnd_bind('<<Drop>>', self.drop)
+        self.button.bind('<Button-1>', func)
 
     def drop_for_source(self, event):
         self.display_file_tree(event.data)
@@ -131,15 +185,73 @@ class App:
     def drop_for_destination(self, event):
         self.display_destination_folder(event.data)
 
-    def setup_treeview(self, x, y, width, height):
+    def setup_tree_input(self, x, y, width, height, image_path=None):
+        if image_path:
+            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            # Retrieve the width and height from the image
+            width = self.image.width()
+            height = self.image.height()
+        else:
+            self.image = None
+
+
+        self.tree_input_image = tk.Label(self.root, image=self.image)
+        self.tree_input_image.place(x=x, y=y, width=width, height=height)
+
+        if self.image:
+            self.tree_iinput_mage = self.image  # Keep a reference to prevent garbage collection
+
+        offset = 6
+
         self.tree = ttk.Treeview(self.root)
-        self.tree.place(x=x, y=y, width=width, height=height)
+        self.tree.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
         self.tree['show'] = 'tree'
         self.tree.drop_target_register(DND_FILES)
         self.tree.dnd_bind('<<Drop>>', self.drop_to_treeview)  # Bind the Drop event
+
         self.drag_prompt_id = self.tree.insert("", "end", text="Drop source file / folder here")
 
-        # self.tree.insert("", "end", text="Drop source file / folder here")
+    def setup_encode_buttons(self, x, y, width, height, label_text, func, image_path=None):
+        if image_path:
+            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            # Retrieve the width and height from the image
+            width = self.image.width()
+            height = self.image.height()
+        else:
+            self.image = None
+        
+        self.button_encode = ttk.Button(self.root, text=label_text, style="TButton", command=func, image=self.image)
+
+        
+        if self.image:
+            self.button_encode.image = self.image  # Keep a reference to prevent garbage collection
+
+        self.button_encode.place(x=x, y=y)
+
+    def setup_tree_output(self, x, y, width, height, image_path=None):
+        if image_path:
+            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            # Retrieve the width and height from the image
+            width = self.image.width()
+            height = self.image.height()
+        else:
+            self.image = None
+
+
+        self.tree_output_image = tk.Label(self.root, image=self.image)
+        self.tree_output_image.place(x=x, y=y, width=width, height=height)
+
+        if self.image:
+            self.tree_output_image = self.image  # Keep a reference to prevent garbage collection
+
+        offset = 6
+
+        self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
+        self.destination_label.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
+        self.destination_label.drop_target_register(DND_FILES)
+        self.destination_label.dnd_bind('<<Drop>>', self.drop)
+        self.destination_label.bind('<Button-1>', self.open_folder_dialog)
+
 
     def drop_to_treeview(self, event):
         widget_type = event.widget.winfo_class()
@@ -416,13 +528,76 @@ class App:
                 print(f"ELAPSED: {self.elapsed_files}")
                 self.elapsed_files += 1
 
-        
+def on_drag(event):
+    x, y = event.x_root, event.y_root
+    root.geometry(f'+{x - offset[0]}+{y - offset[1]}')
 
+def on_click(event):
+    global offset
+    offset = (event.x, event.y)
 
 if __name__ == "__main__":
     root = TkinterDnD.Tk()
     root.title("HAP.py")
     root.geometry("800x600")
     root.configure(bg="#2E2E2E")  # Dark background color
+    # root.overrideredirect(True)  # remove title bar
+
+    # Create a custom title bar
+    title_bar = tk.Frame(root, bg="black", height=30)
+    title_bar.pack(fill=tk.X, side=tk.TOP)
+
+    # Close button
+    close_button = ttk.Button(title_bar, text="X", command=root.quit)
+    close_button.pack(side=tk.RIGHT)
+
+    # Enable dragging of the window
+    title_bar.bind("<Button-1>", on_click)
+    title_bar.bind("<B1-Motion>", on_drag)
+
+
+    # Sample ttk.Button for demonstration
+    sample_button = ttk.Button(root, text="Sample Button")
+    sample_button.pack(pady=20)
+
     app = App(root)
+
+    # title_bar.lift()  # this will bring title_bar to the top
+    
     root.mainloop()
+
+# if __name__ == "__main__":
+#     master = TkinterDnD.Tk()
+#     master.iconify()  # Minimize the master window instead of hiding it completely
+
+#     root = tk.Toplevel(master)  # Use the standard tkinter's Toplevel
+#     root.transient(master)
+
+#     root.title("HAP.py")
+#     root.geometry("800x630")
+#     root.configure(bg="#2E2E2E")
+#     root.overrideredirect(True)  # remove title bar
+
+#     # Create a custom title bar
+#     title_bar = tk.Frame(root, bg="black", height=30)
+#     title_bar.pack(fill=tk.X, side=tk.TOP)
+
+#     # Close button
+#     close_button = ttk.Button(title_bar, text="X", command=root.quit)
+#     close_button.pack(side=tk.RIGHT)
+
+#     # Enable dragging of the window
+#     title_bar.bind("<Button-1>", on_click)
+#     title_bar.bind("<B1-Motion>", on_drag)
+
+#     # Sample ttk.Button for demonstration
+#     sample_button = ttk.Button(root, text="Sample Button")
+#     sample_button.pack(pady=20)
+
+#     app = App(root)
+
+#     title_bar.lift()  # this will bring title_bar to the top
+    
+#     close_button.configure(command=on_close)
+
+#     root.mainloop()
