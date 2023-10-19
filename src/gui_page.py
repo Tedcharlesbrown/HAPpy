@@ -290,3 +290,11 @@ def setup_dropdown(self):
     dropdown['values'] = options  # Setting the options
     dropdown.current(1)  # Set the default value as the first option
     dropdown.place(x=470, y=325)
+
+
+def update_progress_text(self, text):
+    self.style.configure('text.Horizontal.TProgressbar', text=text)
+
+def console_log_progress(self, percentage):
+    self.progress["value"] = percentage
+    print(f"Progress: {percentage:.2f}%")

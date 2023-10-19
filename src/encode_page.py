@@ -33,38 +33,54 @@ def on_encode_click(self, selected):
 
     # Now you can send them to the encoder
     for file_path in all_files_to_encode:
-        print(file_path, self.destination_path)
+        # print(file_path, self.destination_path)
         self.send_to_encoder(file_path)
 
 def send_to_encoder(self, file_path):
     # Extract file name and its immediate parent
     file_name = os.path.basename(file_path)
-    path_parent = os.path.basename(os.path.dirname(file_path))
+    # path_parent = os.path.basename(os.path.dirname(file_path))
 
-    # Decide the destination folder
-    if not self.destination_path:
-        # Identify the base directory 
-        base_path = os.path.dirname(file_path)
-        while os.path.basename(base_path) != self.parent_folder and base_path:
-            base_path = os.path.dirname(base_path)
-        destination_path = os.path.join(base_path, "HAP")
-        # destination_path = base_path
-    else:
-        destination_path = self.destination_path
+    # # Decide the destination folder
+    # if not self.destination_path:
+    #     # Identify the base directory 
+    #     base_path = os.path.dirname(file_path)
+    #     while os.path.basename(base_path) != self.parent_folder and base_path:
+    #         base_path = os.path.dirname(base_path)
+    #     destination_path = os.path.join(base_path, "HAP")
+    #     # destination_path = base_path
+    # else:
+    #     destination_path = self.destination_path
 
-    # Preserve the subdirectory structure if the immediate parent of the file is not self.parent_folder
-    if path_parent != self.parent_folder:
-        destination_path = os.path.join(destination_path, path_parent)
+    # # Preserve the subdirectory structure if the immediate parent of the file is not self.parent_folder
+    # if path_parent != self.parent_folder:
+    #     destination_path = os.path.join(destination_path, path_parent)
 
-    # Construct the final path where the file will be placed/encoded
-    final_path = os.path.splitext(os.path.join(destination_path, file_name))[0]
-    # print(final_path)
-    self.encode_queue.put((file_path, final_path))
+    # # Construct the final path where the file will be placed/encoded
+    # # final_path = os.path.splitext(os.path.join(destination_path, file_name))[0]
+
+    final_path = os.path.join(os.path.dirname(file_path), file_name)
+    print(f"FROM ENCODER: {file_path} --> {final_path}")
+    # self.encode_queue.put((file_path, final_path))
+    self.encode_queue.put((file_path, self.check_for_overwrite(final_path)))
 
     # You can start the encoder thread (if it's not already running):
     if not hasattr(self, "encoder_thread") or not self.encoder_thread.is_alive():
         self.encoder_thread = threading.Thread(target=self.encoder_worker)
-        # self.encoder_thread.start()
+        self.encoder_thread.start()
+
+
+def check_for_overwrite(self, final_path):
+    if os.path.exists(final_path + ".mov"):
+        # Ask the user for confirmation
+        overwrite = input(f"The file {final_path}.mov already exists. Do you want to overwrite? (yes/no): ")
+        if overwrite.lower() != "yes":
+            print("Encoding cancelled.")
+            return False
+
+    #TODO Create HAP folder in parent folder
+def append_to_hap_folder(self, file_path):
+    pass
 
 def encoder_worker(self):
     while not self.encode_queue.empty():

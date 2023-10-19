@@ -46,6 +46,14 @@ def encode_to_hap(input_path, output_path, mode="pad", callback=None):
         stream = ffmpeg.filter(stream, 'scale', new_width, new_height)
     else:
         raise ValueError("Invalid mode. Please use 'pad' or 'scale'.")
+    
+    # Check if the output file already exists
+    if os.path.exists(output_path + ".mov"):
+        # Ask the user for confirmation
+        overwrite = input(f"The file {output_path}.mov already exists. Do you want to overwrite? (yes/no): ")
+        if overwrite.lower() != "yes":
+            print("Encoding cancelled.")
+            return False
 
     stream = ffmpeg.output(stream, output_path + ".mov", vcodec='hap', format='mov', compressor='snappy')
     
@@ -80,26 +88,22 @@ def encode_to_hap(input_path, output_path, mode="pad", callback=None):
 
 
 
-
-
-
-
-def encode_to_hap_half(input_path, output_path):
-    # The example below is for HAP Q encoding with half resolution
-    stream = ffmpeg.input(input_path)
+# def encode_to_hap_half(input_path, output_path):
+#     # The example below is for HAP Q encoding with half resolution
+#     stream = ffmpeg.input(input_path)
     
-    # Calculate dimensions and ensure they're divisible by 4
-    width = 'floor(iw/2/4)*4'
-    height = 'floor(ih/2/4)*4'
+#     # Calculate dimensions and ensure they're divisible by 4
+#     width = 'floor(iw/2/4)*4'
+#     height = 'floor(ih/2/4)*4'
 
-    #4/4
-    #8/4
+#     #4/4
+#     #8/4
 
-    # Scale video to the calculated dimensions
-    scaled_stream = ffmpeg.filter(stream, 'scale', width, height)
+#     # Scale video to the calculated dimensions
+#     scaled_stream = ffmpeg.filter(stream, 'scale', width, height)
 
     
-    # Output the scaled stream with HAP codec settings
-    out_stream = ffmpeg.output(scaled_stream, output_path, vcodec='hap', format='mov', compressor='snappy')
+#     # Output the scaled stream with HAP codec settings
+#     out_stream = ffmpeg.output(scaled_stream, output_path, vcodec='hap', format='mov', compressor='snappy')
     
-    ffmpeg.run(out_stream)
+#     ffmpeg.run(out_stream)

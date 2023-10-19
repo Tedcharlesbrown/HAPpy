@@ -11,4 +11,5 @@ if __name__ == "__main__":
     root.configure(bg="#2E2E2E")  # Dark background color
     app = HAPPY(root)
 
+
     root.mainloop()
