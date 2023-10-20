@@ -309,15 +309,20 @@ def console_log_progress(self, percentage):
 # ---------------------------------------------------------------------------- #
 #                            OVERWRITE CONFIRMATION                            #
 # ---------------------------------------------------------------------------- #
-
-def ask_overwrite_confirmation(self):
+def trigger_overwrite_popup(self):
     dialog = tk.Toplevel(self.root)
     dialog.title("Overwrite Confirmation")
 
     # Set the size of the dialog
-    dialog.geometry("350x200")  # Width x Height
+    dialog.geometry("350x180")  # Width x Height
     # Set the dialog's background color
     dialog.configure(bg="#1a1a1a")
+
+    # Load the background image
+    self.popup_bg_image = tk.PhotoImage(file="GUI/assets/Popup_Background.png")
+    popup_bg_label = tk.Label(dialog, image=self.popup_bg_image, bd=0)
+    popup_bg_label.place(x=0, y=0)
+    # dialog.geometry(f"{self.bg_image.width()}x{self.bg_image.height()}")
 
     # Make the dialog non-resizable
     dialog.resizable(False, False)
@@ -326,24 +331,30 @@ def ask_overwrite_confirmation(self):
     msg = ttk.Label(dialog, text="The file already exists. Do you want to overwrite it?", style="Dialog.TLabel")
     msg.pack(pady=10, padx=10)
     
-    overwrite_all_var = tk.IntVar()
-    
+    def on_yes_all():
+        dialog.result = ("YES TO ALL")
+        dialog.destroy()
+
     def on_yes():
-        dialog.result = (True, overwrite_all_var.get())
+        dialog.result = ("YES")
         dialog.destroy()
 
-    def on_no():
-        dialog.result = (False, overwrite_all_var.get())
+    def on_skip():
+        dialog.result = ("SKIP")
         dialog.destroy()
 
-    yes_all_btn = ttk.Button(dialog, text="Yes to all", command=on_yes, style="Dialog.TButton")
-    yes_all_btn.pack(side="left", padx=10)
 
-    yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton")
-    yes_btn.pack(side="right", padx=10)
+    self.yes_all_image = tk.PhotoImage(file="GUI/assets/Popup_YesAll.png")
+    yes_all_btn = ttk.Button(dialog, text="Yes to all", command=on_yes_all, style="Dialog.TButton", image=self.yes_all_image)
+    yes_all_btn.place(x=10, y=130, width=self.yes_all_image.width(), height=self.yes_all_image.height())
 
-    no_btn = ttk.Button(dialog, text="No", command=on_no, style="Dialog.TButton")
-    no_btn.pack(side="right", padx=10)
+    self.yes_image = tk.PhotoImage(file="GUI/assets/Popup_Yes.png")
+    yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton", image=self.yes_image)
+    yes_btn.place(x=125, y=130, width=self.yes_image.width(), height=self.yes_image.height())
+
+    self.skip_image = tk.PhotoImage(file="GUI/assets/Popup_Skip.png")
+    skip_btn = ttk.Button(dialog, text="Skip", command=on_skip, style="Dialog.TButton", image=self.skip_image)
+    skip_btn.place(x=240, y=130, width=self.skip_image.width(), height=self.skip_image.height())
 
     # Force the dialog to update its layout and dimensions
     dialog.update_idletasks()
@@ -365,5 +376,6 @@ def ask_overwrite_confirmation(self):
     dialog.lift()
     dialog.grab_set()
     dialog.wait_window()
+
     return dialog.result
 

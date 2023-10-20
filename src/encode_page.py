@@ -4,6 +4,8 @@ import time
 
 from encode import encode_to_hap
 
+from encode import Encoder
+
 # ---------------------------------------------------------------------------- #
 #                                    ENCODE                                    #
 # ---------------------------------------------------------------------------- #
@@ -30,7 +32,6 @@ def on_encode_click(self, selected):
     # Count the total files to encode
     self.total_files = len(all_files_to_encode)
     print(f"Total number of files to encode: {self.total_files}")
-    print(self.ask_overwrite_confirmation())
 
     # Now you can send them to the encoder
     for file_path in all_files_to_encode:
@@ -63,21 +64,12 @@ def send_to_encoder(self, file_path):
     final_path = os.path.join(os.path.dirname(file_path), file_name)
     print(f"FROM ENCODER: {file_path} --> {final_path}")
     # self.encode_queue.put((file_path, final_path))
-    self.encode_queue.put((file_path, self.check_for_overwrite(final_path)))
+    self.encode_queue.put((file_path, final_path))
 
     # You can start the encoder thread (if it's not already running):
     if not hasattr(self, "encoder_thread") or not self.encoder_thread.is_alive():
         self.encoder_thread = threading.Thread(target=self.encoder_worker)
         self.encoder_thread.start()
-
-
-def check_for_overwrite(self, final_path):
-    if os.path.exists(final_path + ".mov"):
-        # Ask the user for confirmation
-        overwrite = input(f"The file {final_path}.mov already exists. Do you want to overwrite? (yes/no): ")
-        if overwrite.lower() != "yes":
-            print("Encoding cancelled.")
-            return False
 
     #TODO Create HAP folder in parent folder
 def append_to_hap_folder(self, file_path):
