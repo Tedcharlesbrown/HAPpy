@@ -340,7 +340,7 @@ def ask_overwrite_confirmation(self):
     yes_all_btn.pack(side="left", padx=10)
 
     yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton")
-    yes_btn.pack(side="left", padx=10)
+    yes_btn.pack(side="right", padx=10)
 
     no_btn = ttk.Button(dialog, text="No", command=on_no, style="Dialog.TButton")
     no_btn.pack(side="right", padx=10)

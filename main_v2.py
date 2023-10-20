@@ -11,6 +11,5 @@ if __name__ == "__main__":
     root.geometry("800x600")
     root.configure(bg="#2E2E2E")  # Dark background color
     app = HAPPY(root)
-
-    # print(app.ask_overwrite_confirmation())
+    
     root.mainloop()
