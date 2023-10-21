@@ -39,7 +39,14 @@ def setup_ui(self):
     self.setup_progressbar(25,480,350,40,image_path="GUI/assets/progressbar.png")
 
     # -------------------------------- CHECKBOXES -------------------------------- #
-    self.setup_checkboxes()
+    self.var_destination_same_as_source = tk.IntVar(value=1)
+    self.setup_checkboxes(430,160,"Destination same as Source", self.var_destination_same_as_source)
+    self.var_create_hap_folder_at_source = tk.IntVar(value=1)
+    self.setup_checkboxes(455,187,"Create HAP folder at Source (preserves subfolders)", self.var_create_hap_folder_at_source)
+    self.var_append_hap_to_file_name = tk.IntVar()
+    self.setup_checkboxes(430,228,"Append HAP to filename (preserves version tag)", self.var_append_hap_to_file_name)
+    self.var_advanced_options = tk.IntVar()
+    self.setup_checkboxes(430,263,"Advanced options", self.var_advanced_options)
 
     # self.setup_dropdown()
 
@@ -56,10 +63,16 @@ def configure_styles(self):
     self.style_button_foreground = "#FFFFFF"
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
+    # ---------------------------------- IMAGES ---------------------------------- #
+    self.checkbox_on_image = PhotoImage(file="GUI/assets/Checkbox_on.png")
+    self.checkbox_off_image = PhotoImage(file="GUI/assets/Checkbox_off.png")
+    self.radio_on_image = PhotoImage(file="GUI/assets/Radio_on.png")
+    self.radio_off_image = PhotoImage(file="GUI/assets/Radio_off.png")
     # -------------------------------- BACKGROUND -------------------------------- #
     style = ttk.Style()
     self.style = ttk.Style(self.root)
     style.theme_use("default")
+    style.layout('Custom.TCheckbutton', [('Checkbutton.label', {'sticky': 'nswe'})])
     style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
     self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf", size=12)
 
@@ -71,8 +84,22 @@ def configure_styles(self):
     style.configure("TButton", background=self.style_background, foreground=self.style_background, relief="flat", padding=(0), borderwidth=0)
     style.map("TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
 
-
+    # -------------------------------- CHECKBOXES -------------------------------- #
+    style.configure('Custom.TCheckbutton',
+                    indicatoron=False,
+                    background=self.style_background,
+                    relief='flat',
+                    image=self.checkbox_off_image)
+    style.map('Custom.TCheckbutton',
+            image=[('selected', self.checkbox_on_image)])
+    style.configure("Checkbox.TLabel", background="#222322", foreground="#FFFFFF")
     
+    
+
+
+
+
+
     style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
     style.configure("TCheckbutton", font=100)  # Adjust size as needed
@@ -258,33 +285,40 @@ def setup_progressbar(self,x,y,width,height,image_path=None):
 #                                  CHECKBOXES                                  #
 # ---------------------------------------------------------------------------- #
 
-def setup_checkboxes(self):
-    var_destination_match_source = tk.IntVar()
-    var_append_hap = tk.IntVar()
-    var_create_proxys = tk.IntVar()
-    var_create_proxys_only = tk.IntVar()
-    var_create_thumbnails = tk.IntVar()
-    var_create_thumbnails_only = tk.IntVar()
-    var_advanced_options = tk.IntVar()
+def setup_checkboxes(self, x, y, text, variable):
+    checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton')
+    checkbox.place(x=x, y=y)
 
-    checkbox_destination_match_source = ttk.Checkbutton(self.root, text="Destination same as Source", variable=var_destination_match_source)
-    checkbox_destination_match_source.place(x=450, y=80)
+    label = ttk.Label(self.root, text=text, style="Checkbox.TLabel")
+    label.place(x=x + 25, y=y-1)  
 
-    checkbox_append_hap = ttk.Checkbutton(self.root, text="Append HAP to filename (preserves version)", variable=var_append_hap)
-    checkbox_append_hap.place(x=450, y=120)
+# def setup_checkboxes(self):
+    # var_destination_match_source = tk.IntVar()
+    # var_append_hap = tk.IntVar()
+    # var_create_proxys = tk.IntVar()
+    # var_create_proxys_only = tk.IntVar()
+    # var_create_thumbnails = tk.IntVar()
+    # var_create_thumbnails_only = tk.IntVar()
+    # var_advanced_options = tk.IntVar()
 
-    checkbox_create_proxys = ttk.Checkbutton(self.root, text="Create proxys", variable=var_create_proxys)
-    checkbox_create_proxys.place(x=450, y=160)
-    checkbox_create_proxys_only = ttk.Checkbutton(self.root, text="Create proxys only", variable=var_create_proxys_only)
-    checkbox_create_proxys_only.place(x=470, y=180)
+    # checkbox_destination_match_source = ttk.Checkbutton(self.root, text="Destination same as Source", variable=var_destination_match_source, style='Custom.TCheckbutton')
+    # checkbox_destination_match_source.place(x=430, y=160)
 
-    checkbox_create_thumbnails = ttk.Checkbutton(self.root, text="Create thumbnails", variable=var_create_thumbnails)
-    checkbox_create_thumbnails.place(x=450, y=220)
-    checkbox_create_thumbnails_only = ttk.Checkbutton(self.root, text="Create thumbnails only", variable=var_create_thumbnails_only)
-    checkbox_create_thumbnails_only.place(x=470, y=240)
+    # checkbox_append_hap = ttk.Checkbutton(self.root, text="Append HAP to filename (preserves version)", variable=var_append_hap, style='Custom.TCheckbutton')
+    # checkbox_append_hap.place(x=455, y=187)
 
-    checkbox_advanced_options = ttk.Checkbutton(self.root, text="Advanced Codec Options", variable=var_advanced_options)
-    checkbox_advanced_options.place(x=450, y=300)
+    # checkbox_create_proxys = ttk.Checkbutton(self.root, text="Create proxys", variable=var_create_proxys)
+    # checkbox_create_proxys.place(x=450, y=160)
+    # checkbox_create_proxys_only = ttk.Checkbutton(self.root, text="Create proxys only", variable=var_create_proxys_only)
+    # checkbox_create_proxys_only.place(x=470, y=180)
+
+    # checkbox_create_thumbnails = ttk.Checkbutton(self.root, text="Create thumbnails", variable=var_create_thumbnails)
+    # checkbox_create_thumbnails.place(x=450, y=220)
+    # checkbox_create_thumbnails_only = ttk.Checkbutton(self.root, text="Create thumbnails only", variable=var_create_thumbnails_only)
+    # checkbox_create_thumbnails_only.place(x=470, y=240)
+
+    # checkbox_advanced_options = ttk.Checkbutton(self.root, text="Advanced Codec Options", variable=var_advanced_options)
+    # checkbox_advanced_options.place(x=450, y=300)
 
 def setup_dropdown(self):
     options = ["HAP", "HAP Alpha", "HAP Q", "HAP Q Alpha", "HAP Alpha Only"]

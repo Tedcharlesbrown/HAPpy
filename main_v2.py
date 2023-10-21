@@ -12,6 +12,7 @@ if __name__ == "__main__":
     root.title("HAP.py")
     root.geometry("800x600")
     root.configure(bg="#2E2E2E")  # Dark background color
+    
     app = HAPPY(root)
     
     root.mainloop()
