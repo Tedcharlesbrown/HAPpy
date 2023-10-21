@@ -1,34 +1,30 @@
 import subprocess
-import os
 
-def check_executable(executable_path):
-    """Try to execute the given executable and return True if successful, else False."""
-    try:
-        # Running the executable with -version argument to get its version
-        completed_process = subprocess.run([executable_path, "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        
-        # If the return code is 0, it executed successfully
-        if completed_process.returncode == 0:
-            print(f"'{executable_path}' executed successfully!")
-            print(completed_process.stdout.split('\n')[0])  # Printing the first line of the version info
-            return True
-        else:
-            print(f"Error while executing '{executable_path}': {completed_process.stderr}")
-            return False
-            
-    except FileNotFoundError:
-        print(f"'{executable_path}' was not found!")
-        return False
-    except Exception as e:
-        print(f"Unexpected error while executing '{executable_path}': {e}")
-        return False
+def encode_to_hap(input_file, output_file, ffmpeg_bin_path="ffmpeg"):
+    """
+    Encode a video to the HAP codec using subprocess to call ffmpeg directly.
 
-current_directory = os.path.dirname(os.path.abspath(__file__))
-ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
+    Parameters:
+    - input_file: Path to the input video file.
+    - output_file: Path to the output HAP encoded video file.
+    - ffmpeg_bin_path: Path to the ffmpeg binary.
+    """
+    
+    # Create the ffmpeg command
+    cmd = [
+        ffmpeg_bin_path,
+        '-i', input_file,
+        '-vcodec', 'hap',
+        '-y',  # Overwrite output file if it exists
+        output_file
+    ]
+    
+    # Run the command
+    subprocess.run(cmd, check=True)
 
-ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
-ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+if __name__ == "__main__":
+    input_path = r"C:\Users\TedCh\OneDrive\Desktop\test\input.png"
+    output_path = r"C:\Users\TedCh\OneDrive\Desktop\test\output.mov"
+    ffmpeg_binary = r"C:\Users\TedCh\OneDrive\Documents\GitHub\HAPpy\FFMPEG\ffmpeg.exe"
 
-# Check the executables
-check_executable(ffmpeg_bin)
-check_executable(ffprobe_bin)
+    encode_to_hap(input_path, output_path, ffmpeg_binary)

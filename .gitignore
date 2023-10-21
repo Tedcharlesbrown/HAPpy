@@ -1,2 +1,5 @@
 __pycache__/
 Export/
+FFMPEG/ffmpeg.exe
+FFMPEG/ffplay.exe
+FFMPEG/ffprobe.exe
