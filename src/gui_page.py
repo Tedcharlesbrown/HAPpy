@@ -39,7 +39,7 @@ def setup_ui(self):
     self.setup_progressbar(25,480,350,40,image_path="GUI/assets/progressbar.png")
 
     # -------------------------------- CHECKBOXES -------------------------------- #
-    # self.setup_checkboxes()
+    self.setup_checkboxes()
 
     # self.setup_dropdown()
 
