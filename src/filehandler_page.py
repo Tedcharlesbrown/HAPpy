@@ -72,8 +72,9 @@ def populate_file_tree(self, parent, folder_path):
             self.tree.insert(parent, "end", text=filename, values=(entry_path,))
 
     # ------------------------ OPEN DIRECTORES IN TREE ----------------------- #
-    for item in self.tree.get_children():
-        self.tree.item(item, open=True)
+    check_file_tree(self)
+    # for item in self.tree.get_children():
+    #     self.tree.item(item, open=True)
 
 def display_destination_folder(self, folder_path):
     """Displays the selected destination folder."""
@@ -93,3 +94,55 @@ def gather_files_for_encode(self, item_id):
             file_paths.extend(self.gather_files_for_encode(child_id))
 
     return file_paths
+
+def remove_selection(self):
+    """Deselects the currently selected items in the tree."""
+    selected_items = self.tree.selection()
+    for item in selected_items:
+        self.tree.selection_remove(item)
+
+def clear_file_tree(self):
+    """Removes selected files or directories from the file tree in the Treeview. 
+       If no items are selected, remove all files and empty directories."""
+
+    def delete_items_recursive(items):
+        """Recursively deletes files and checks if a directory is empty."""
+        for item in items:
+            if self.tree.item(item)["values"]:  # Check if the item is a file
+                self.tree.delete(item)
+            else:
+                # Recursively delete files and sub-directories within this directory
+                delete_items_recursive(self.tree.get_children(item))
+                # Check if the directory is now empty and delete it if so
+                if not self.tree.get_children(item):
+                    self.tree.delete(item)
+
+    selected_items = self.tree.selection()
+    
+    # If items are selected
+    if selected_items:
+        delete_items_recursive(selected_items)
+    # If no items are selected, remove all files from the tree
+    else:
+        delete_items_recursive(self.tree.get_children())
+
+    check_file_tree(self)
+
+
+def check_file_tree(self):
+    """Opens each directory in the Treeview. If a directory has no children, it's removed."""
+
+    def check_items_recursive(items):
+        """Recursively opens directories and checks if a directory is empty."""
+        for item in items:
+            # If the item is a directory
+            if not self.tree.item(item)["values"]:
+                self.tree.item(item, open=True)  # Open the directory
+                # Recursively check children
+                check_items_recursive(self.tree.get_children(item))
+                # If the directory is now empty after checking children, delete it
+                if not self.tree.get_children(item):
+                    self.tree.delete(item)
+
+    # Start the check from the top level of the tree
+    check_items_recursive(self.tree.get_children())

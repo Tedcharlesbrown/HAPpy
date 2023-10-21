@@ -16,15 +16,11 @@ def setup_ui(self):
     # ------------------------- Select A File & Select A Folder ------------------------ #
     self.setup_button(x=25, y=20, width=0, height=0, label_text="Click here to select a file", option="INPUT_FILE", image_path="GUI/assets/Button_SelectAFile.png")
     self.setup_button(x=204, y=20, width=0, height=0, label_text="Click here to select a folder", option="INPUT_FOLDER", image_path="GUI/assets/Button_SelectAFolder.png")
-    self.setup_button(x=25, y=400, width=0, height=0, label_text="Clear Selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_ClearSelection.png")
-    self.setup_button(x=204, y=400, width=0, height=0, label_text="Remove Files", option="REMOVE_FILES", image_path="GUI/assets/Button_RemoveFiles.png")
-    
-
     # --------------------------------- Tree View -------------------------------- #
     self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="GUI/assets/Tree_DropArea.png")
-
     # ---------------------- Clear Selection & Remove Files ---------------------- #
-
+    self.setup_button(x=25, y=400, width=0, height=0, label_text="Clear Selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_ClearSelection.png")
+    self.setup_button(x=204, y=400, width=0, height=0, label_text="Remove Files", option="REMOVE_FILES", image_path="GUI/assets/Button_RemoveFiles.png")
     # -------------------------------- DESTINATION ------------------------------- #
     # --------------------------- Select A Destination --------------------------- #
     self.setup_button(x=430, y=20, width=350, height=40, label_text="Click here to select a destination", option="DESTINATION_FOLDER", image_path="GUI/assets/Button_SelectADestination.png")
@@ -97,11 +93,6 @@ def configure_styles(self):
     style.configure("Checkbox.TLabel", background=self.style_background, foreground="#FFFFFF")
     
     
-
-
-
-
-
     style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
     style.configure("TCheckbutton", font=100)  # Adjust size as needed
@@ -130,11 +121,6 @@ def configure_styles(self):
     style.configure("Dialog.TLabel", background=self.style_background, foreground="#FFFFFF")
     style.configure("Dialog.TButton", background="black", foreground="white", relief="flat", padding=(0), borderwidth=0)
     style.map("Dialog.TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
-
-
-    
-
-
 
 # ---------------------------------------------------------------------------- #
 #                                     INPUT                                    #
@@ -168,6 +154,10 @@ def setup_button(self, x, y, width, height, label_text, option, image_path=None)
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))
     elif option == "DESTINATION_FOLDER":
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
+    elif option == "CLEAR_SELECTION":
+        self.button["command"] = self.remove_selection
+    elif option == "REMOVE_FILES":
+        self.button["command"] = self.clear_file_tree
 
     # self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
     self.button.bind('<Button-1>', func)
@@ -294,34 +284,6 @@ def setup_checkboxes(self, x, y, text, variable):
     label = ttk.Label(self.root, text=text, style="Checkbox.TLabel")
     label.place(x=x + 25, y=y-1)  
 
-# def setup_checkboxes(self):
-    # var_destination_match_source = tk.IntVar()
-    # var_append_hap = tk.IntVar()
-    # var_create_proxys = tk.IntVar()
-    # var_create_proxys_only = tk.IntVar()
-    # var_create_thumbnails = tk.IntVar()
-    # var_create_thumbnails_only = tk.IntVar()
-    # var_advanced_options = tk.IntVar()
-
-    # checkbox_destination_match_source = ttk.Checkbutton(self.root, text="Destination same as Source", variable=var_destination_match_source, style='Custom.TCheckbutton')
-    # checkbox_destination_match_source.place(x=430, y=160)
-
-    # checkbox_append_hap = ttk.Checkbutton(self.root, text="Append HAP to filename (preserves version)", variable=var_append_hap, style='Custom.TCheckbutton')
-    # checkbox_append_hap.place(x=455, y=187)
-
-    # checkbox_create_proxys = ttk.Checkbutton(self.root, text="Create proxys", variable=var_create_proxys)
-    # checkbox_create_proxys.place(x=450, y=160)
-    # checkbox_create_proxys_only = ttk.Checkbutton(self.root, text="Create proxys only", variable=var_create_proxys_only)
-    # checkbox_create_proxys_only.place(x=470, y=180)
-
-    # checkbox_create_thumbnails = ttk.Checkbutton(self.root, text="Create thumbnails", variable=var_create_thumbnails)
-    # checkbox_create_thumbnails.place(x=450, y=220)
-    # checkbox_create_thumbnails_only = ttk.Checkbutton(self.root, text="Create thumbnails only", variable=var_create_thumbnails_only)
-    # checkbox_create_thumbnails_only.place(x=470, y=240)
-
-    # checkbox_advanced_options = ttk.Checkbutton(self.root, text="Advanced Codec Options", variable=var_advanced_options)
-    # checkbox_advanced_options.place(x=450, y=300)
-
 def setup_dropdown(self):
     options = ["HAP", "HAP Alpha", "HAP Q", "HAP Q Alpha", "HAP Alpha Only"]
     codec_option = tk.StringVar()  # To store the selected option
@@ -330,8 +292,6 @@ def setup_dropdown(self):
     dropdown['values'] = options  # Setting the options
     dropdown.current(1)  # Set the default value as the first option
     dropdown.place(x=470, y=325)
-
-
 
 
 def update_progress_text(self, text):
