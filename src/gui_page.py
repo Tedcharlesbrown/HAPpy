@@ -1,15 +1,19 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, PhotoImage, font
+from tkinter import ttk,PhotoImage, font
 from functools import partial
 from tkinterdnd2 import DND_FILES, TkinterDnD
+
+from autopytoexe_path import resource_path
 
 # ---------------------------------------------------------------------------- #
 #                                   SETUP UI                                   #
 # ---------------------------------------------------------------------------- #
 
+
+
 def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
-    self.bg = PhotoImage(file = "GUI/assets/background.png") 
+    self.bg = PhotoImage(file=resource_path("GUI/assets/background.png")) 
     self.background = ttk.Label(self.root, image = self.bg) 
     self.background.place(x = 0, y = 0) 
     # ----------------------------------- INPUT ---------------------------------- #
@@ -62,10 +66,10 @@ def configure_styles(self):
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
     # ---------------------------------- IMAGES ---------------------------------- #
-    self.checkbox_on_image = PhotoImage(file="GUI/assets/Checkbox_on.png")
-    self.checkbox_off_image = PhotoImage(file="GUI/assets/Checkbox_off.png")
-    self.radio_on_image = PhotoImage(file="GUI/assets/Radio_on.png")
-    self.radio_off_image = PhotoImage(file="GUI/assets/Radio_off.png")
+    self.checkbox_on_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_on.png"))
+    self.checkbox_off_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_off.png"))
+    self.radio_on_image = PhotoImage(file=resource_path("GUI/assets/Radio_on.png"))
+    self.radio_off_image = PhotoImage(file=resource_path("GUI/assets/Radio_off.png"))
     # -------------------------------- BACKGROUND -------------------------------- #
     style = ttk.Style()
     self.style = ttk.Style(self.root)
@@ -134,7 +138,7 @@ def setup_button(self, x, y, width, height, label_text, option, image_path=None)
     func = partial(self.open_file_or_folder_dialog, option)
 
     if image_path:
-        self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
         # Retrieve the width and height from the image
         width = self.image.width()
         height = self.image.height()
@@ -168,7 +172,7 @@ def setup_button(self, x, y, width, height, label_text, option, image_path=None)
 
 def setup_tree_input(self, x, y, width, height, image_path=None):
     if image_path:
-        self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
         # Retrieve the width and height from the image
         width = self.image.width()
         height = self.image.height()
@@ -198,7 +202,7 @@ def setup_tree_input(self, x, y, width, height, image_path=None):
 
 def setup_encode_buttons(self, x, y, width, height, label_text, func, image_path=None):
         if image_path:
-            self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+            self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
             # Retrieve the width and height from the image
             width = self.image.width()
             height = self.image.height()
@@ -218,7 +222,7 @@ def setup_encode_buttons(self, x, y, width, height, label_text, func, image_path
 
 def setup_output_tree(self, x, y, width, height, image_path=None):
     if image_path:
-        self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
         # Retrieve the width and height from the image
         width = self.image.width()
         height = self.image.height()
@@ -246,7 +250,7 @@ def setup_output_tree(self, x, y, width, height, image_path=None):
 
 def setup_progressbar(self,x,y,width,height,image_path=None):
     if image_path:
-        self.image = tk.PhotoImage(file=image_path)  # Load the image using tk.PhotoImage
+        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
         # Retrieve the width and height from the image
         width = self.image.width()
         height = self.image.height()
@@ -315,7 +319,7 @@ def trigger_overwrite_popup(self):
     dialog.configure(bg="#1a1a1a")
 
     # Load the background image
-    self.popup_bg_image = tk.PhotoImage(file="GUI/assets/Popup_Background.png")
+    self.popup_bg_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Background.png"))
     popup_bg_label = tk.Label(dialog, image=self.popup_bg_image, bd=0)
     popup_bg_label.place(x=0, y=0)
     # dialog.geometry(f"{self.bg_image.width()}x{self.bg_image.height()}")
@@ -340,15 +344,15 @@ def trigger_overwrite_popup(self):
         dialog.destroy()
 
 
-    self.yes_all_image = tk.PhotoImage(file="GUI/assets/Popup_YesAll.png")
+    self.yes_all_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_YesAll.png"))
     yes_all_btn = ttk.Button(dialog, text="Yes to all", command=on_yes_all, style="Dialog.TButton", image=self.yes_all_image)
     yes_all_btn.place(x=10, y=130, width=self.yes_all_image.width(), height=self.yes_all_image.height())
 
-    self.yes_image = tk.PhotoImage(file="GUI/assets/Popup_Yes.png")
+    self.yes_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Yes.png"))
     yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton", image=self.yes_image)
     yes_btn.place(x=125, y=130, width=self.yes_image.width(), height=self.yes_image.height())
 
-    self.skip_image = tk.PhotoImage(file="GUI/assets/Popup_Skip.png")
+    self.skip_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Skip.png"))
     skip_btn = ttk.Button(dialog, text="Skip", command=on_skip, style="Dialog.TButton", image=self.skip_image)
     skip_btn.place(x=240, y=130, width=self.skip_image.width(), height=self.skip_image.height())
 

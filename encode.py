@@ -3,11 +3,18 @@ import subprocess
 import re
 import ffmpeg  # ffmpeg-python
 
+from autopytoexe_path import resource_path
+
 class Encoder:
     def __init__(self):
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
+        # current_directory = os.path.dirname(os.path.abspath(__file__))
+        # ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
         
+        # self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
+        # self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+
+        ffmpeg_folder = resource_path('FFMPEG')
+
         self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
         self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
 
@@ -60,16 +67,22 @@ class Encoder:
             cmd.extend(['-vf', f'scale={new_width}:{new_height}'])
         else:
             raise ValueError("Invalid mode. Please use 'pad' or 'scale'.")
-        
-        
 
         cmd.extend([
-            '-vcodec', 'hap',
-            '-y',  # Overwrite output file if it exists
-            os.path.splitext(output_path)[0] + ".mov"
+            '-c:v', 'hap',
+            '-format', 'hap_alpha', # hap, hap_alpha, hap_q
+            '-y',
+            os.path.splitext(output_path)[0] + "_HAP.mov"
         ])
 
+        print(" ".join(cmd))
         process = subprocess.Popen(cmd, stderr=subprocess.PIPE, universal_newlines=True)
+
+        # stdout, stderr = process.communicate()
+        # if process.returncode != 0:
+        #     print(f"FFmpeg failed with error: {stderr}")
+        # else:
+        #     print(stdout)
 
         duration_pattern = re.compile(r"Duration: (\d+:\d+:\d+\.\d+)")
         progress_pattern = re.compile(r"time=(\d+:\d+:\d+\.\d+)")

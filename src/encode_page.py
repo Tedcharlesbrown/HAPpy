@@ -70,7 +70,7 @@ def send_to_encoder(self, file_path):
         final_path = os.path.join((self.destination_path), file_name)
 
     # print(f"DESTINATION FOLDER = {self.destination_path}")
-    # print(f"FROM ENCODER: {file_path} --> {final_path}")
+    print(f"FROM ENCODER: {file_path} --> {final_path}")
 
     self.encode_queue.put((file_path, final_path))
 

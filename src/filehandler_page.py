@@ -1,5 +1,5 @@
 import os
-from tkinter import ttk, filedialog, PhotoImage, font
+from tkinter import filedialog
 
 # ---------------------------------------------------------------------------- #
 #                                 INPUT METHODS                                #
