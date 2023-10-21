@@ -1,8 +1,5 @@
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from src import HAPPY
-import time
-
-
 
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #

@@ -16,6 +16,8 @@ def setup_ui(self):
     # ------------------------- Select A File & Select A Folder ------------------------ #
     self.setup_button(x=25, y=20, width=0, height=0, label_text="Click here to select a file", option="INPUT_FILE", image_path="GUI/assets/Button_SelectAFile.png")
     self.setup_button(x=204, y=20, width=0, height=0, label_text="Click here to select a folder", option="INPUT_FOLDER", image_path="GUI/assets/Button_SelectAFolder.png")
+    self.setup_button(x=25, y=400, width=0, height=0, label_text="Clear Selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_ClearSelection.png")
+    self.setup_button(x=204, y=400, width=0, height=0, label_text="Remove Files", option="REMOVE_FILES", image_path="GUI/assets/Button_RemoveFiles.png")
     
 
     # --------------------------------- Tree View -------------------------------- #
@@ -164,7 +166,7 @@ def setup_button(self, x, y, width, height, label_text, option, image_path=None)
     # self.button.dnd_bind('<<Drop>>', self.source_dropped_on_button)
     if option == "INPUT_FILE" or option == "INPUT_FOLDER":
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))
-    else:
+    elif option == "DESTINATION_FOLDER":
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
 
     # self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
