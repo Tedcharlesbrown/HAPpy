@@ -7,17 +7,29 @@ import re
 class Encoder:
     def __init__(self):
         # current_directory = os.path.dirname(os.path.abspath(__file__))
-        # self.ffmpeg_bin = os.path.join(current_directory, 'FFMPEG')
-        # self.ffprobe_bin = os.path.join(current_directory, 'FFMPEG')
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
+        # ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
         
-        self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
-        self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+        # ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
+        # ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+
+        ffmpeg_bin = r"C:\Users\TedCh\OneDrive\Documents\GitHub\HAPpy\FFMPEG\ffmpeg.exe"
+        ffprobe_bin = r"C:\Users\TedCh\OneDrive\Documents\GitHub\HAPpy\FFMPEG\ffprobe.exe"
+
+        # Check if the specified ffmpeg.exe file exists
+        if os.path.exists(ffmpeg_bin):
+            print(f'ffmpeg.exe found at {ffmpeg_bin}')
+        else:
+            print(f'ffmpeg.exe not found at {ffmpeg_bin}')
+
+        # Check if the specified ffprobe.exe file exists
+        if os.path.exists(ffprobe_bin):
+            print(f'ffprobe.exe found at {ffprobe_bin}')
+        else:
+            print(f'ffprobe.exe not found at {ffprobe_bin}')
 
         # Set the paths for ffmpeg-python
-        ffmpeg._run.DEFAULT_FFMPEG_PATH = self.ffmpeg_bin
-        ffmpeg._run.DEFAULT_FFPROBE_PATH = self.ffprobe_bin 
+        # ffmpeg._run.DEFAULT_FFMPEG_PATH = ffmpeg_bin
+        # ffmpeg._run.DEFAULT_FFPROBE_PATH = ffprobe_bin 
 
     @staticmethod
     def get_video_dimensions(input_path):
