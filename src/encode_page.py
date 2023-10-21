@@ -2,13 +2,13 @@ import os
 import threading
 import time
 
-from encode import encode_to_hap
-
 from encode import Encoder
 
 # ---------------------------------------------------------------------------- #
 #                                    ENCODE                                    #
 # ---------------------------------------------------------------------------- #
+
+
 
 def on_encode_click(self, selected):
     """Handles the encode button click event."""
@@ -61,9 +61,17 @@ def send_to_encoder(self, file_path):
     # # Construct the final path where the file will be placed/encoded
     # # final_path = os.path.splitext(os.path.join(destination_path, file_name))[0]
 
+    # final_path = os.path.join(os.path.dirname(file_path), file_name)
+
     final_path = os.path.join(os.path.dirname(file_path), file_name)
-    print(f"FROM ENCODER: {file_path} --> {final_path}")
-    # self.encode_queue.put((file_path, final_path))
+
+    if self.destination_path:
+        # print("DESTINATION PATH EXISTS")
+        final_path = os.path.join((self.destination_path), file_name)
+
+    # print(f"DESTINATION FOLDER = {self.destination_path}")
+    # print(f"FROM ENCODER: {file_path} --> {final_path}")
+
     self.encode_queue.put((file_path, final_path))
 
     # You can start the encoder thread (if it's not already running):
@@ -86,7 +94,7 @@ def run_encoder(self, file_path, final_path):
         self.console_log_progress(0.0)
     time.sleep(0.25)
     self.root.after(0, self.update_progress_text, f"({self.elapsed_files}/{self.total_files}) : {os.path.basename(file_path)}")
-    result = encode_to_hap(file_path, final_path, mode="scale", callback=self.console_log_progress)
+    result = self.encoder.encode_to_hap(file_path, final_path, mode="scale", callback=self.console_log_progress)  # <-- Added the callback parameter here
 
     if result:
         time.sleep(0.25)

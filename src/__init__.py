@@ -2,6 +2,8 @@ import queue
 import threading
 import tkinter as tk
 
+from encode import Encoder
+
 class HAPPY:
     def __init__(self, root):
         self.root = root
@@ -15,6 +17,7 @@ class HAPPY:
         self.parent_folder = ""
         self.elapsed_files = 1
         self.total_files = 0
+        self.encoder = Encoder()
 
     # TODO import via "from . import gui_page, filehandler_page, encode_page" - Requires changing how the functions are called
 

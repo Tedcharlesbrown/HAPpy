@@ -78,6 +78,7 @@ def populate_file_tree(self, parent, folder_path):
 def display_destination_folder(self, folder_path):
     """Displays the selected destination folder."""
     self.destination_label.config(text=folder_path)  # Update the label text with the new destination
+    # print("SETTING DESTINATION PATH")
     self.destination_path = folder_path  
 
 def gather_files_for_encode(self, item_id):
