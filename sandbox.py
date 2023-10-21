@@ -1,38 +1,34 @@
-import tkinter as tk
+import subprocess
+import os
 
-def ask_confirmation():
-    def on_submit():
-        if var.get():
-            print("Checkbox is checked")
+def check_executable(executable_path):
+    """Try to execute the given executable and return True if successful, else False."""
+    try:
+        # Running the executable with -version argument to get its version
+        completed_process = subprocess.run([executable_path, "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        
+        # If the return code is 0, it executed successfully
+        if completed_process.returncode == 0:
+            print(f"'{executable_path}' executed successfully!")
+            print(completed_process.stdout.split('\n')[0])  # Printing the first line of the version info
+            return True
         else:
-            print("Checkbox is not checked")
-        if response_var.get() == "Yes":
-            print("User clicked Yes")
-        else:
-            print("User clicked No")
-        popup.destroy()
+            print(f"Error while executing '{executable_path}': {completed_process.stderr}")
+            return False
+            
+    except FileNotFoundError:
+        print(f"'{executable_path}' was not found!")
+        return False
+    except Exception as e:
+        print(f"Unexpected error while executing '{executable_path}': {e}")
+        return False
 
-    popup = tk.Toplevel(root)
-    popup.title("Confirmation")
+current_directory = os.path.dirname(os.path.abspath(__file__))
+ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
 
-    label = tk.Label(popup, text="Do you want to continue?")
-    label.pack(pady=20)
+ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
+ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
 
-    var = tk.IntVar()
-    checkbox = tk.Checkbutton(popup, text="Do this for all", variable=var)
-    checkbox.pack(pady=10)
-
-    response_var = tk.StringVar()
-    yes_btn = tk.Button(popup, text="Yes", command=lambda: response_var.set("Yes"), width=10)
-    no_btn = tk.Button(popup, text="No", command=lambda: response_var.set("No"), width=10)
-    submit_btn = tk.Button(popup, text="Submit", command=on_submit, width=10)
-
-    yes_btn.pack(side="left", padx=10)
-    no_btn.pack(side="right", padx=10)
-    submit_btn.pack(pady=20)
-
-root = tk.Tk()
-btn = tk.Button(root, text="Ask Confirmation", command=ask_confirmation)
-btn.pack(pady=20)
-
-root.mainloop()
+# Check the executables
+check_executable(ffmpeg_bin)
+check_executable(ffprobe_bin)

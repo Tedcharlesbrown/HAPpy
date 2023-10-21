@@ -6,9 +6,14 @@ import re
 
 class Encoder:
     def __init__(self):
+        # current_directory = os.path.dirname(os.path.abspath(__file__))
+        # self.ffmpeg_bin = os.path.join(current_directory, 'FFMPEG')
+        # self.ffprobe_bin = os.path.join(current_directory, 'FFMPEG')
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        self.ffmpeg_bin = os.path.join(current_directory, 'FFMPEG')
-        self.ffprobe_bin = os.path.join(current_directory, 'FFMPEG')
+        ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
+        
+        self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
+        self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
 
         # Set the paths for ffmpeg-python
         ffmpeg._run.DEFAULT_FFMPEG_PATH = self.ffmpeg_bin
