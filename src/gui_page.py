@@ -57,7 +57,7 @@ def load_font(self, font_path, size=12):
 
 def configure_styles(self):
     # --------------------------------- VARIABLES -------------------------------- #
-    self.style_background = '#1a1a1a'
+    self.style_background = '#1d1d1d'
     self.style_progressbar_background = '#333333'
     self.style_button_background = "#555555"
     self.style_button_foreground = "#FFFFFF"
@@ -92,7 +92,7 @@ def configure_styles(self):
                     image=self.checkbox_off_image)
     style.map('Custom.TCheckbutton',
             image=[('selected', self.checkbox_on_image)])
-    style.configure("Checkbox.TLabel", background="#222322", foreground="#FFFFFF")
+    style.configure("Checkbox.TLabel", background=self.style_background, foreground="#FFFFFF")
     
     
 
