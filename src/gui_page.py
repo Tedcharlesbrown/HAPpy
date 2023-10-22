@@ -54,11 +54,15 @@ def setup_ui(self):
     self.var_only_create_proxys = tk.IntVar(value=0)
     self.setup_checkboxes(480,467,"Only create Proxys", self.var_only_create_proxys)
     
+    # ----------------------------------- RADIO ---------------------------------- #
     self.var_codec_option = tk.StringVar(value="HAP_ALPHA")
-
     self.setup_radio(488,315 ,"HAP", self.var_codec_option, "HAP")
     self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "HAP_ALPHA")
     self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "HAP_Q")
+
+    self.var_scale_pad_option = tk.StringVar(value="SCALE")
+    self.setup_radio(488,370 ,"Scale", self.var_scale_pad_option, "SCALE")
+    self.setup_radio(713,370 ,"Pad", self.var_scale_pad_option, "PAD")
 
 def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -76,11 +80,11 @@ def configure_styles(self):
     # ---------------------------------- IMAGES ---------------------------------- #
     self.checkbox_on_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_on.png"))
     self.checkbox_off_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_off.png"))
-    self.radio_on_image = PhotoImage(file=resource_path("GUI/assets/Radio_on.png"))
-    self.radio_off_image = PhotoImage(file=resource_path("GUI/assets/Radio_off.png"))
+    self.radio_on_image = PhotoImage(file=resource_path("GUI/assets/radio_on.png"))
+    self.radio_off_image = PhotoImage(file=resource_path("GUI/assets/radio_off.png"))
     # -------------------------------- BACKGROUND -------------------------------- #
     style = ttk.Style()
-    self.style = ttk.Style(self.root)
+    self.style = ttk.Style()
     style.theme_use("default")
     style.layout('Custom.TCheckbutton', [('Checkbutton.label', {'sticky': 'nswe'})])
     style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
@@ -108,20 +112,33 @@ def configure_styles(self):
     style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
     style.configure("TCheckbutton", font=100)  # Adjust size as needed
-    
-    # style.configure("TCombobox", 
-    #                 fieldbackground="#333333",    # Combobox's main color
-    #                 background="#555555",         # Arrow button color
-    #                 foreground="#FFFFFF",         # Text color
-    #                 arrowcolor="#FFFFFF",         # Arrow color
-    #                 borderwidth=0,                # Border width
-    #                 padding=5)                    # Padding around text
-    
-    # style.map("TCombobox", 
-    #         fieldbackground=[('readonly', "#000000")], 
-    #         selectbackground=[('readonly', "#555555")],
-    #         selectforeground=[('readonly', "#555555")])
 
+    # ------------------------------- RADIO BUTTONS ------------------------------ #
+    self.style.layout("TRadiobutton", [
+        ("Radiobutton.padding", {
+            "children": [
+                ("CustomRadioIndicator", {"side": "left", "sticky": "ns"}),
+                ("Radiobutton.label", {"side": "left", "sticky": ""})
+            ]
+        })
+    ])
+    self.style.element_create("CustomRadioIndicator", "image", self.radio_off_image, ("selected", self.radio_on_image), border=0, sticky="ew")    
+    self.style.configure("TRadiobutton",
+                background=self.style_background,
+                foreground="white",  # Text color
+                font=("Arial", 10),
+                anchor="center",
+                indicator="CustomRadioIndicator",  # Use the custom element
+                # width=self.radio_off_image.width(),  # Set the width to match the image's width
+                compound="left")  # Ensure the image is to the left of the text
+    self.style.map("TRadiobutton",
+               foreground=[('active', self.style_background)],
+               background=[('active', self.style_background)]
+               )
+    
+    self.style.configure("Radio.TLabel", anchor="center")
+
+    # ------------------------------- PROGRESS BAR ------------------------------- #
     style.layout('text.Horizontal.TProgressbar', 
                         [('Horizontal.Progressbar.trough',
                         {'children': [('Horizontal.Progressbar.pbar',
@@ -301,18 +318,15 @@ def handle_checkbox_toggle(self):
     if not self.var_destination_same_as_source.get():
         self.var_create_hap_folder_at_source.set(False)
 
-# def setup_dropdown(self):
-#     options = ["HAP", "HAP Alpha", "HAP Q", "HAP Q Alpha", "HAP Alpha Only"]
-#     codec_option = tk.StringVar()  # To store the selected option
-
-#     dropdown = ttk.Combobox(self.root, textvariable=self.codec_option, state='readonly')
-#     dropdown['values'] = options  # Setting the options
-#     dropdown.current(1)  # Set the default value as the first option
-#     dropdown.place(x=470, y=325)
-
 def setup_radio(self, x, y, text, variable, value, command=None):
-    radio = ttk.Radiobutton(self.root, text=text, variable=variable, value=value)
+    radio = ttk.Radiobutton(self.root, text=None, variable=variable, value=value, style='TRadiobutton')
     radio.place(x=x, y=y)
+
+    label = ttk.Label(self.root, text=text, style="Radio.TLabel")
+    # label.place(x=x, y=y+20) 
+    # label.place(x=x - (self.radio_on_image.width() // 2), y=y+20)
+    label.place(x=x+9, y=y+30, anchor="center")
+
 
 
 def update_progress_text(self, text):
