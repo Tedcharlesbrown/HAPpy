@@ -33,6 +33,11 @@ def on_encode_click(self, selected):
     self.total_files = len(all_files_to_encode)
     print(f"Total number of files to encode: {self.total_files}")
 
+    #TODO gather checkbox values
+    print(self.var_destination_same_as_source.get())
+    print(self.var_create_hap_folder_at_source.get())
+    print(self.var_append_hap_to_file_name.get())
+
     # Now you can send them to the encoder
     for file_path in all_files_to_encode:
         # print(file_path, self.destination_path)
