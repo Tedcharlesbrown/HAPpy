@@ -1,5 +1,6 @@
 import os
 from tkinter import filedialog
+from tkinterdnd2 import DND_FILES, Tk
 
 # ---------------------------------------------------------------------------- #
 #                                 INPUT METHODS                                #
@@ -42,14 +43,19 @@ def display_input_tree(self, folder_path):
         self.populate_file_tree(root_item, folder_path)
 
     else:  # If it's a single file
-        filename = os.path.basename(folder_path).replace("}", "")
+        if folder_path.startswith("{") and folder_path.endswith("}"): # Copy pasted files have curly braces around them
+            folder_path = folder_path[1:-1]
+        filename = os.path.basename(folder_path)
         found_acceptable_extension = any(filename.endswith(container) for container in self.acceptable_containers)
 
         if found_acceptable_extension:
+            self.console.log(f"Displaying {folder_path} to the file tree", "FILE")
             self.tree.insert("", "end", text=filename, values=(folder_path,))
         else:
             print(f"FILE EXTENSION ERROR: {filename}")
             return
+
+
 
 def populate_file_tree(self, parent, folder_path):
     """Helper method to populate the Treeview with the file structure."""
@@ -69,17 +75,19 @@ def populate_file_tree(self, parent, folder_path):
         entry_path = os.path.join(folder_path, entry)
         filename = os.path.basename(entry_path)
         if any(filename.endswith(container) for container in self.acceptable_containers): # only add acceptable exstensions
+            self.console.log(f"Populating {entry_path} to the file tree", "FILE")
             self.tree.insert(parent, "end", text=filename, values=(entry_path,))
 
     # ------------------------ OPEN DIRECTORES IN TREE ----------------------- #
     check_file_tree(self)
-    # for item in self.tree.get_children():
-    #     self.tree.item(item, open=True)
 
 def display_destination_folder(self, folder_path):
     """Displays the selected destination folder."""
+    if folder_path.startswith("{") and folder_path.endswith("}"): # Copy pasted files have curly braces around them
+            folder_path = folder_path[1:-1]
     self.destination_label.config(text=folder_path)  # Update the label text with the new destination
-    # print("SETTING DESTINATION PATH")
+    self.console.log(f"Destination folder set to {folder_path}", "DESTINATION")
+    self.var_destination_same_as_source.set(False)
     self.destination_path = folder_path  
 
 def gather_files_for_encode(self, item_id):
@@ -95,13 +103,13 @@ def gather_files_for_encode(self, item_id):
 
     return file_paths
 
-def remove_selection(self):
+def clear_selection(self):
     """Deselects the currently selected items in the tree."""
     selected_items = self.tree.selection()
     for item in selected_items:
         self.tree.selection_remove(item)
 
-def clear_file_tree(self):
+def remove_file_from_tree(self):
     """Removes selected files or directories from the file tree in the Treeview. 
        If no items are selected, remove all files and empty directories."""
 
@@ -109,6 +117,7 @@ def clear_file_tree(self):
         """Recursively deletes files and checks if a directory is empty."""
         for item in items:
             if self.tree.item(item)["values"]:  # Check if the item is a file
+                self.console.log(f"Removing {self.tree.item(item, 'text')} from the file tree", "FILE")
                 self.tree.delete(item)
             else:
                 # Recursively delete files and sub-directories within this directory

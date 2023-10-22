@@ -43,14 +43,22 @@ def setup_ui(self):
     # -------------------------------- CHECKBOXES -------------------------------- #
     self.var_destination_same_as_source = tk.IntVar(value=1)
     self.setup_checkboxes(430,160,"Destination same as Source", self.var_destination_same_as_source)
-    self.var_create_hap_folder_at_source = tk.IntVar(value=1)
+    self.var_create_hap_folder_at_source = tk.IntVar(value=0)
     self.setup_checkboxes(455,187,"Create HAP folder at Source (preserves subfolders)", self.var_create_hap_folder_at_source)
-    self.var_append_hap_to_file_name = tk.IntVar()
+    self.var_append_hap_to_file_name = tk.IntVar(value=1)
     self.setup_checkboxes(430,228,"Append HAP to filename (preserves version tag)", self.var_append_hap_to_file_name)
-    self.var_advanced_options = tk.IntVar()
+    self.var_advanced_options = tk.IntVar(value=0)
     self.setup_checkboxes(430,263,"Advanced options", self.var_advanced_options)
+    self.var_create_proxys = tk.IntVar(value=0)
+    self.setup_checkboxes(455,444,"Create Proxys", self.var_create_proxys)
+    self.var_only_create_proxys = tk.IntVar(value=0)
+    self.setup_checkboxes(480,467,"Only create Proxys", self.var_only_create_proxys)
+    
+    self.var_codec_option = tk.StringVar(value="HAP_ALPHA")
 
-    # self.setup_dropdown()
+    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "HAP")
+    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "HAP_ALPHA")
+    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "HAP_Q")
 
 def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -101,18 +109,18 @@ def configure_styles(self):
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
     style.configure("TCheckbutton", font=100)  # Adjust size as needed
     
-    style.configure("TCombobox", 
-                    fieldbackground="#333333",    # Combobox's main color
-                    background="#555555",         # Arrow button color
-                    foreground="#FFFFFF",         # Text color
-                    arrowcolor="#FFFFFF",         # Arrow color
-                    borderwidth=0,                # Border width
-                    padding=5)                    # Padding around text
+    # style.configure("TCombobox", 
+    #                 fieldbackground="#333333",    # Combobox's main color
+    #                 background="#555555",         # Arrow button color
+    #                 foreground="#FFFFFF",         # Text color
+    #                 arrowcolor="#FFFFFF",         # Arrow color
+    #                 borderwidth=0,                # Border width
+    #                 padding=5)                    # Padding around text
     
-    style.map("TCombobox", 
-            fieldbackground=[('readonly', "#000000")], 
-            selectbackground=[('readonly', "#555555")],
-            selectforeground=[('readonly', "#555555")])
+    # style.map("TCombobox", 
+    #         fieldbackground=[('readonly', "#000000")], 
+    #         selectbackground=[('readonly', "#555555")],
+    #         selectforeground=[('readonly', "#555555")])
 
     style.layout('text.Horizontal.TProgressbar', 
                         [('Horizontal.Progressbar.trough',
@@ -159,9 +167,9 @@ def setup_button(self, x, y, width, height, label_text, option, image_path=None)
     elif option == "DESTINATION_FOLDER":
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
     elif option == "CLEAR_SELECTION":
-        self.button["command"] = self.remove_selection
+        self.button["command"] = self.clear_selection
     elif option == "REMOVE_FILES":
-        self.button["command"] = self.clear_file_tree
+        self.button["command"] = self.remove_file_from_tree
 
     # self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
     self.button.bind('<Button-1>', func)
@@ -281,29 +289,63 @@ def setup_progressbar(self,x,y,width,height,image_path=None):
 #                                  CHECKBOXES                                  #
 # ---------------------------------------------------------------------------- #
 
-def setup_checkboxes(self, x, y, text, variable):
-    checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton')
+def setup_checkboxes(self, x, y, text, variable, command=None):
+    checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda: self.handle_checkbox_toggle())
+    # checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda var=command: self.handle_checkbox_toggle(var))
     checkbox.place(x=x, y=y)
 
     label = ttk.Label(self.root, text=text, style="Checkbox.TLabel")
     label.place(x=x + 25, y=y-1)  
 
-def setup_dropdown(self):
-    options = ["HAP", "HAP Alpha", "HAP Q", "HAP Q Alpha", "HAP Alpha Only"]
-    codec_option = tk.StringVar()  # To store the selected option
+def handle_checkbox_toggle(self):
+    if not self.var_destination_same_as_source.get():
+        self.var_create_hap_folder_at_source.set(False)
 
-    dropdown = ttk.Combobox(self.root, textvariable=self.codec_option, state='readonly')
-    dropdown['values'] = options  # Setting the options
-    dropdown.current(1)  # Set the default value as the first option
-    dropdown.place(x=470, y=325)
+# def setup_dropdown(self):
+#     options = ["HAP", "HAP Alpha", "HAP Q", "HAP Q Alpha", "HAP Alpha Only"]
+#     codec_option = tk.StringVar()  # To store the selected option
+
+#     dropdown = ttk.Combobox(self.root, textvariable=self.codec_option, state='readonly')
+#     dropdown['values'] = options  # Setting the options
+#     dropdown.current(1)  # Set the default value as the first option
+#     dropdown.place(x=470, y=325)
+
+def setup_radio(self, x, y, text, variable, value, command=None):
+    radio = ttk.Radiobutton(self.root, text=text, variable=variable, value=value)
+    radio.place(x=x, y=y)
 
 
 def update_progress_text(self, text):
     self.style.configure('text.Horizontal.TProgressbar', text=text)
 
+# def console_log_progress(self, percentage):
+#     self.progress["value"] = percentage
+#     self.console.log(f"Encoding progress: {percentage}%", "ENCODE")
+
 def console_log_progress(self, percentage):
-    self.progress["value"] = percentage
-    print(f"Progress: {percentage:.2f}%")
+        self.progress["value"] = percentage
+        percentage = int(percentage)
+
+        if self.progress_bar_update:
+            if percentage < self.progress_bar_next_update:
+                return
+            else:
+                # self.console.log(f"Encoding progress: {percentage}%", "ENCODE")
+                self.console.log(f"Encoding progress: {self.progress_bar_next_update}%", "ENCODE")
+                if percentage < 25:
+                    self.progress_bar_next_update = 25
+                elif percentage < 50:
+                    self.progress_bar_next_update = 50
+                elif percentage < 75:
+                    self.progress_bar_next_update = 75
+                elif percentage < 100:
+                    self.progress_bar_next_update = 100
+                else:
+                    self.progress_bar_next_update = 101 
+                self.progress_bar_update = False
+        elif percentage >= self.progress_bar_next_update:
+            self.progress_bar_update = True
+
 
 
 # ---------------------------------------------------------------------------- #
@@ -332,7 +374,7 @@ def trigger_overwrite_popup(self):
     msg.pack(pady=10, padx=10)
     
     def on_yes_all():
-        dialog.result = ("YES TO ALL")
+        dialog.result = ("ALL")
         dialog.destroy()
 
     def on_yes():

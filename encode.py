@@ -7,31 +7,41 @@ from autopytoexe_path import resource_path
 
 class Encoder:
     def __init__(self):
-        # current_directory = os.path.dirname(os.path.abspath(__file__))
-        # ffmpeg_folder = os.path.join(current_directory, 'FFMPEG')
-        
-        # self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
-        # self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
-
         ffmpeg_folder = resource_path('FFMPEG')
 
         self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
         self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+        self.ffmpeg_version = None
+        self.ffprobe_version = None
 
         # Check if the specified ffmpeg.exe file exists
-        if os.path.exists(self.ffmpeg_bin):
-            print(f'ffmpeg.exe found at {self.ffmpeg_bin}')
-        else:
-            print(f'ffmpeg.exe not found at {self.ffmpeg_bin}')
-
-        # Check if the specified ffprobe.exe file exists
-        if os.path.exists(self.ffprobe_bin):
-            print(f'ffprobe.exe found at {self.ffprobe_bin}')
-        else:
-            print(f'ffprobe.exe not found at {self.ffprobe_bin}')
+        if os.path.exists(ffmpeg_folder):
+            try:
+                self.ffmpeg_version = subprocess.run([self.ffmpeg_bin, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.ffmpeg_version = self.ffmpeg_version.stdout.decode('utf-8').splitlines()[0]
+                # print(self.ffmpeg_version)
+            except subprocess.CalledProcessError as e:
+                print("ERROR")
+            try:
+                self.ffprobe_version = subprocess.run([self.ffprobe_bin, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.ffprobe_version = self.ffprobe_version.stdout.decode('utf-8').splitlines()[0]
+                # print(self.ffprobe_version)
+            except subprocess.CalledProcessError as e:
+                print("ERROR")
 
         ffmpeg._run.DEFAULT_FFMPEG_PATH = self.ffmpeg_bin
-        ffmpeg._run.DEFAULT_FFPROBE_PATH = self.ffprobe_bin
+        ffmpeg._run.DEFAULT_FFPROBE_PATH = self.ffprobe_bin     
+    
+    def __str__(self):
+        return f"FFmpeg version: {self.ffmpeg_version}\nFFprobe version: {self.ffprobe_version}"
+    
+    def get_version(self, exe="ffmpeg"):
+        if exe == "ffmpeg":
+            return self.ffmpeg_version
+        elif exe == "ffprobe":
+            return self.ffprobe_version
+        else:
+            raise ValueError("Invalid argument. Please use 'ffmpeg' or 'ffprobe'.")
 
     @staticmethod
     def get_video_dimensions(self, input_path):
@@ -72,7 +82,8 @@ class Encoder:
             '-c:v', 'hap',
             '-format', 'hap_alpha', # hap, hap_alpha, hap_q
             '-y',
-            os.path.splitext(output_path)[0] + "_HAP.mov"
+            # os.path.splitext(output_path)[0] + "_HAP.mov"
+            output_path + ".mov"
         ])
 
         print(" ".join(cmd))
@@ -100,7 +111,8 @@ class Encoder:
                 if callback:
                     callback(progress_percentage)
 
-        return_code = process.wait()
+        # return_code = process.wait()
         # After FFmpeg finishes, make sure you set the progress to 100%.
         if callback:
             callback(100.0)
+            return True
