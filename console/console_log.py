@@ -35,7 +35,13 @@ class Logger:
 	def log(self, message, type=None):
 		if type is None:
 			type = "LOG"
-		message = f"{self.get_current_time()},{type},{message}"
-		print(f"CONSOLE LOG: {message}")
-		self.write_log(message)
+		# message = f"{self.get_current_time()},{type},{message}"
+		# print(f"CONSOLE LOG: {message}")
+		# self.write_log(message)
+		# Escape any double quotes in the message and then enclose the message in double quotes
+		escaped_message = '"' + message.replace('"', '""') + '"'
+
+		log_message = "{},{},{}".format(self.get_current_time(), type, escaped_message)
+		print("CONSOLE LOG: {}".format(log_message))
+		self.write_log(log_message)
 

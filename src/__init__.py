@@ -3,6 +3,7 @@ import threading
 import tkinter as tk
 
 from encode import Encoder
+from autopytoexe_path import resource_path
 
 class HAPPY:
     def __init__(self, root, logger):
@@ -24,6 +25,7 @@ class HAPPY:
         self.elapsed_files = 1
         self.total_files = 0
         self.console = logger
+
 
 
         # Encoding

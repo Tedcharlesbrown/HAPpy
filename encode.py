@@ -56,7 +56,7 @@ class Encoder:
     def round_up_to_nearest_four(n):
         return (n + 3) & ~3  # Rounds up to the nearest multiple of 4
 
-    def encode_to_hap(self, input_path, output_path, mode="pad", callback=None):
+    def encode_to_hap(self, input_path, output_path, codec="hap_alpha", mode="scale", callback=None):
         width, height = self.get_video_dimensions(self, input_path)
 
         new_width = self.round_up_to_nearest_four(width)
@@ -80,7 +80,7 @@ class Encoder:
 
         cmd.extend([
             '-c:v', 'hap',
-            '-format', 'hap_alpha', # hap, hap_alpha, hap_q
+            '-format', codec, # hap, hap_alpha, hap_q
             '-y',
             # os.path.splitext(output_path)[0] + "_HAP.mov"
             output_path + ".mov"
@@ -115,4 +115,4 @@ class Encoder:
         # After FFmpeg finishes, make sure you set the progress to 100%.
         if callback:
             callback(100.0)
-            return True
+            return cmd, True

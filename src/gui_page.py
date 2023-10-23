@@ -55,14 +55,18 @@ def setup_ui(self):
     self.setup_checkboxes(480,470,"Only create Proxys", self.var_only_create_proxys, True)
     
     # ----------------------------------- RADIO ---------------------------------- #
-    self.var_codec_option = tk.StringVar(value="HAP_ALPHA")
-    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "HAP", True)
-    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "HAP_ALPHA", True)
-    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "HAP_Q", True)
+    # self.advanced_select_codec = ttk.Label(self.root, text="Select Codec", style="Advanced.TLabel")
+    # self.advanced_select_codec.place(x=548, y=295)
+    self.var_codec_option = tk.StringVar(value="hap_alpha")
+    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "hap", True)
+    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "hap_alpha", True)
+    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "hap_q", True)
 
-    self.var_scale_pad_option = tk.StringVar(value="SCALE")
-    self.setup_radio(528,393,"Scale", self.var_scale_pad_option, "SCALE", True)
-    self.setup_radio(672,393,"Pad", self.var_scale_pad_option, "PAD", True)
+    # self.advanced_select_scaling = ttk.Label(self.root, text="Scaling", style="Advanced.TLabel")
+    # self.advanced_select_scaling.place(x=571, y=382)
+    self.var_scale_option = tk.StringVar(value="scale")
+    self.setup_radio(528,393,"Scale", self.var_scale_option, "scale", True)
+    self.setup_radio(672,393,"Pad", self.var_scale_option, "pad", True)
 
 def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -112,6 +116,9 @@ def configure_styles(self):
     style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
     style.configure("TCheckbutton", font=100)  # Adjust size as needed
+
+    # -------------------------- Advanced Options Button ------------------------- #
+    style.configure("Advanced.TLabel", background=self.style_background, foreground="#FFFFFF")
 
     # ------------------------------- RADIO BUTTONS ------------------------------ #
     self.style.layout("TRadiobutton", [
@@ -343,19 +350,19 @@ def handle_checkbox_toggle(self):
     if not self.var_destination_same_as_source.get():
         self.var_create_hap_folder_at_source.set(False)
     if self.var_advanced_options.get():
-        show_advanced_options(self, "HAP")
-        show_advanced_options(self, "HAP_ALPHA")
-        show_advanced_options(self, "HAP_Q")
-        show_advanced_options(self, "SCALE")
-        show_advanced_options(self, "PAD")
+        show_advanced_options(self, "hap")
+        show_advanced_options(self, "hap_alpha")
+        show_advanced_options(self, "hap_q")
+        show_advanced_options(self, "scale")
+        show_advanced_options(self, "pad")
         show_advanced_options(self, "Create Proxys")
         show_advanced_options(self, "Only create Proxys")
     else:
-        hide_advanced_options(self, "HAP")
-        hide_advanced_options(self, "HAP_ALPHA")
-        hide_advanced_options(self, "HAP_Q")
-        hide_advanced_options(self, "SCALE")
-        hide_advanced_options(self, "PAD")
+        hide_advanced_options(self, "hap")
+        hide_advanced_options(self, "hap_alpha")
+        hide_advanced_options(self, "hap_q")
+        hide_advanced_options(self, "scale")
+        hide_advanced_options(self, "pad")
         hide_advanced_options(self, "Create Proxys")
         hide_advanced_options(self, "Only create Proxys")
 
@@ -384,10 +391,6 @@ def setup_radio(self, x, y, text, variable, value, hidden=None):
 
 def update_progress_text(self, text):
     self.style.configure('text.Horizontal.TProgressbar', text=text)
-
-# def console_log_progress(self, percentage):
-#     self.progress["value"] = percentage
-#     self.console.log(f"Encoding progress: {percentage}%", "ENCODE")
 
 def console_log_progress(self, percentage):
         self.progress["value"] = percentage
