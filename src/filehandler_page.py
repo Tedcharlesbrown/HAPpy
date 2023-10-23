@@ -1,6 +1,7 @@
 import os
 from tkinter import filedialog
 from tkinterdnd2 import DND_FILES, Tk
+import re
 
 # ---------------------------------------------------------------------------- #
 #                                 INPUT METHODS                                #
@@ -10,20 +11,45 @@ from tkinterdnd2 import DND_FILES, Tk
 def open_file_or_folder_dialog(self, button, event=None):
     """Opens a file or folder dialog based on which label was clicked."""
     paths = ""
+    is_file = False
     if button == "INPUT_FILE":
         paths = filedialog.askopenfilenames()
+        is_file = True
     elif button == "INPUT_FOLDER":
         paths = filedialog.askdirectory()
     elif button == "DESTINATION_FOLDER":
         self.display_destination_folder(filedialog.askdirectory())
 
-    if paths:
+    if paths and is_file:
         for path in paths:
+            print(path)
             self.display_input_tree(path)  # Send each individual file path to be displayed
+    else: 
+        print(paths)
+        self.display_input_tree(paths)
+
+#TODO: Fix this, edge case with {} in file names
+# Drop method appends {} to each file name
+def handle_input_drop(self, path):
+    """Handles the drag and drop event."""
+    path = path.replace("\\", "")
+    paths = path.split("} {")
+    for path in paths:
+        # print(os.path.basename(path.replace("{","")))
+        # print(os.path.join(os.path.dirname(path), os.path.basename(path).replace("{","")))
+        base_name = os.path.basename(path).replace("{","").replace("}","")
+        path = os.path.join(os.path.dirname(path),base_name)
+        if path.startswith(r"{"):
+                path = path[1:]
+        if path.endswith(r"}"):
+                path = path[:-1]
+
+        self.display_input_tree(path)
 
 # ----------------------------- IMPORT FILE TREE ----------------------------- #
-def display_input_tree(self, folder_path):
+def display_input_tree(self, path):
     """Displays the file tree of the specified folder in the Treeview."""
+
     # -------------------- REMOVE INITIAL PROMPT ------------------- #
     if self.tree.exists(self.drag_prompt_id):
         self.tree.delete(self.drag_prompt_id)
@@ -32,37 +58,37 @@ def display_input_tree(self, folder_path):
     # ----------------- CHECK IF PATH EXISTS ----------------- #
     for item in self.tree.get_children():
         item_value = self.tree.item(item, 'values')
-        if folder_path in item_value:
-            print(f"Path {folder_path} already exists in the tree. Skipping...") #TODO This only works with single files
-            return
+        if path in item_value:
+            print(f"Path {path} already exists in the tree. Skipping...") #TODO This only works with single files
+            # return
 
     # -------------------------- CHECK IF FILE OR FOLDER ------------------------- #
     # If the path is a directory, create a top-level parent node for the directory
-    if os.path.isdir(folder_path):
-        root_item = self.tree.insert("", "end", text=os.path.basename(folder_path))
-        self.populate_file_tree(root_item, folder_path)
+    if os.path.isdir(path):
+        root_item = self.tree.insert("", "end", text=os.path.basename(path))
+        self.populate_file_tree(root_item, path)
 
     else:  # If it's a single file
-        if folder_path.startswith("{") and folder_path.endswith("}"): # Copy pasted files have curly braces around them
-            folder_path = folder_path[1:-1]
-        filename = os.path.basename(folder_path)
+        if path.startswith("{") and path.endswith("}"): # Copy pasted files have curly braces around them
+            path = path[1:-1]
+        filename = os.path.basename(path)
         found_acceptable_extension = any(filename.endswith(container) for container in self.acceptable_containers)
 
         if found_acceptable_extension:
-            self.console.log(f"Displaying {folder_path} to the file tree", "FILE")
-            self.tree.insert("", "end", text=filename, values=(folder_path,))
+            self.console.log(f"Displaying {path} to the file tree", "FILE")
+            self.tree.insert("", "end", text=filename, values=(path,))
         else:
             print(f"FILE EXTENSION ERROR: {filename}")
-            return
+            # return
 
 
 
-def populate_file_tree(self, parent, folder_path):
+def populate_file_tree(self, parent, path):
     """Helper method to populate the Treeview with the file structure."""
 
     # ------------------------- LOOP THROUGH DIRECTORIES ------------------------- #
-    for entry in sorted(os.listdir(folder_path)):
-        entry_path = os.path.join(folder_path, entry)
+    for entry in sorted(os.listdir(path)):
+        entry_path = os.path.join(path, entry)
 
         # ------------------------------- SUB DIRECTORY ------------------------------ #
         if os.path.isdir(entry_path):
@@ -71,8 +97,8 @@ def populate_file_tree(self, parent, folder_path):
             self.populate_file_tree(child_item, entry_path)  # Recurse into the sub-directory
     
     # ------------------------------- HANDLE FILES ------------------------------- #
-    for entry in sorted(os.listdir(folder_path)):
-        entry_path = os.path.join(folder_path, entry)
+    for entry in sorted(os.listdir(path)):
+        entry_path = os.path.join(path, entry)
         filename = os.path.basename(entry_path)
         if any(filename.endswith(container) for container in self.acceptable_containers): # only add acceptable exstensions
             self.console.log(f"Populating {entry_path} to the file tree", "FILE")
@@ -83,11 +109,15 @@ def populate_file_tree(self, parent, folder_path):
 
 def display_destination_folder(self, folder_path):
     """Displays the selected destination folder."""
+    
+    if not os.path.isdir(folder_path): # If the path is a file, get the parent directory
+        folder_path = os.path.dirname(folder_path)
+
     if folder_path.startswith("{") and folder_path.endswith("}"): # Copy pasted files have curly braces around them
             folder_path = folder_path[1:-1]
     self.destination_label.config(text=folder_path)  # Update the label text with the new destination
     self.console.log(f"Destination folder set to {folder_path}", "DESTINATION")
-    self.var_destination_same_as_source.set(False)
+    self.var_destination_same_as_source.set(False) # Uncheck the destination same as source checkbox
     self.destination_path = folder_path  
 
 def gather_files_for_encode(self, item_id):

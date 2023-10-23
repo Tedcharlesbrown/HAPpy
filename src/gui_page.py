@@ -9,6 +9,9 @@ from autopytoexe_path import resource_path
 #                                   SETUP UI                                   #
 # ---------------------------------------------------------------------------- #
 
+def setup_constants(self):
+    pass
+
 
 
 def setup_ui(self):
@@ -16,57 +19,74 @@ def setup_ui(self):
     self.bg = PhotoImage(file=resource_path("GUI/assets/background.png")) 
     self.background = ttk.Label(self.root, image = self.bg) 
     self.background.place(x = 0, y = 0) 
-    # ----------------------------------- INPUT ---------------------------------- #
+    # ----------------------------------- INPUT -------------------------------`--- #
     # ------------------------- Select A File & Select A Folder ------------------------ #
-    self.setup_button(x=25, y=20, width=0, height=0, label_text="Click here to select a file", option="INPUT_FILE", image_path="GUI/assets/Button_SelectAFile.png")
-    self.setup_button(x=204, y=20, width=0, height=0, label_text="Click here to select a folder", option="INPUT_FOLDER", image_path="GUI/assets/Button_SelectAFolder.png")
+    self.setup_button(x=25, y=20, text="Select a file", option="INPUT_FILE", image_path="GUI/assets/Button_Medium.png")
+    self.setup_button(x=204, y=20, text="Select a folder", option="INPUT_FOLDER", image_path="GUI/assets/Button_Medium.png")
     # --------------------------------- Tree View -------------------------------- #
-    self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="GUI/assets/Tree_DropArea.png")
+    self.setup_tree(x=25, y=80, tree_type="INPUT", image_path="GUI/assets/Tree_Input.png")
+    # self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="GUI/assets/Tree_Input.png")
     # ---------------------- Clear Selection & Remove Files ---------------------- #
-    self.setup_button(x=25, y=400, width=0, height=0, label_text="Clear Selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_ClearSelection.png")
-    self.setup_button(x=204, y=400, width=0, height=0, label_text="Remove Files", option="REMOVE_FILES", image_path="GUI/assets/Button_RemoveFiles.png")
+    self.setup_button(x=25, y=400, text="Clear selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_Medium.png")
+    self.setup_button(x=204, y=400, text="Remove files", option="REMOVE_FILES", image_path="GUI/assets/Button_Medium.png")
     # -------------------------------- DESTINATION ------------------------------- #
     # --------------------------- Select A Destination --------------------------- #
-    self.setup_button(x=430, y=20, width=350, height=40, label_text="Click here to select a destination", option="DESTINATION_FOLDER", image_path="GUI/assets/Button_SelectADestination.png")
+    self.setup_button(x=430, y=20, text="Select a destination", option="DESTINATION_FOLDER", image_path="GUI/assets/Button_Large.png")
     # --------------------------------- Tree View -------------------------------- #
-    self.setup_output_tree(x=430, y=80, width=350, height=40, image_path="GUI/assets/Tree_Destination.png")
+    self.setup_tree(x=430, y=80, tree_type="OUTPUT", image_path="GUI/assets/Tree_Destination.png")
+    # self.setup_output_tree(x=430, y=80, width=350, height=40, image_path="GUI/assets/Tree_Destination.png")
 
     # ---------------------------------- ENCODE ---------------------------------- #
-    encode_selected = partial(self.on_encode_click, True)
-    encode_all = partial(self.on_encode_click, False)
-    self.setup_encode_buttons(25,540,0,0,"Encode Selected",encode_selected,image_path="GUI/assets/Button_EncodeSelected.png")
-    self.setup_encode_buttons(204,540,0,0,"Encode All",encode_all,image_path="GUI/assets/Button_EncodeAll.png")
+    # encode_selected = partial(self.on_encode_click, True)
+    # encode_all = partial(self.on_encode_click, False)
+    self.setup_button(x=25, y=540, text="Encode Selected   ",option="ENCODE_SELECTED", image_path="GUI/assets/Button_EncodeSelected.png")
+    self.setup_button(x=204, y=540, text="Encode All",option="ENCODE_ALL", image_path="GUI/assets/Button_EncodeAll.png")
+    # self.setup_encode_buttons(x=25,y=540,width=0,height=0,text="Encode Selected",func=encode_selected,image_path="GUI/assets/Button_EncodeSelected.png")
+    # self.setup_encode_buttons(x=204,y=540,width=0,height=0,text="Encode All",func=encode_all,image_path="GUI/assets/Button_EncodeAll.png")
 
     # ------------------------------- PROGRESS BAR ------------------------------- #
     self.setup_progressbar(25,480,350,40,image_path="GUI/assets/progressbar.png")
 
-    # -------------------------------- CHECKBOXES -------------------------------- #
-    self.var_destination_same_as_source = tk.IntVar(value=1)
-    self.setup_checkboxes(430,160,"Destination same as Source", self.var_destination_same_as_source)
-    self.var_create_hap_folder_at_source = tk.IntVar(value=0)
-    self.setup_checkboxes(455,187,"Create HAP folder at Source (preserves subfolders)", self.var_create_hap_folder_at_source)
-    self.var_append_hap_to_file_name = tk.IntVar(value=1)
-    self.setup_checkboxes(430,228,"Append HAP to filename (preserves version tag)", self.var_append_hap_to_file_name)
-    self.var_advanced_options = tk.IntVar(value=0)
-    self.setup_checkboxes(430,263,"Advanced options", self.var_advanced_options)
-    self.var_create_proxys = tk.IntVar(value=0)
-    self.setup_checkboxes(455,444,"Create Proxys", self.var_create_proxys, True)
-    self.var_only_create_proxys = tk.IntVar(value=0),
-    self.setup_checkboxes(480,470,"Only create Proxys", self.var_only_create_proxys, True)
-    
-    # ----------------------------------- RADIO ---------------------------------- #
-    # self.advanced_select_codec = ttk.Label(self.root, text="Select Codec", style="Advanced.TLabel")
-    # self.advanced_select_codec.place(x=548, y=295)
-    self.var_codec_option = tk.StringVar(value="hap_alpha")
-    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "hap", True)
-    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "hap_alpha", True)
-    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "hap_q", True)
 
-    # self.advanced_select_scaling = ttk.Label(self.root, text="Scaling", style="Advanced.TLabel")
-    # self.advanced_select_scaling.place(x=571, y=382)
+    # ---------------------------- CHECKBOX VARIABLES ---------------------------- #
+    self.var_destination_same_as_source = tk.IntVar(value=1)
+    self.var_create_hap_folder_at_source = tk.IntVar(value=0)
+    self.var_append_hap_to_file_name = tk.IntVar(value=1)
+    self.var_advanced_options = tk.IntVar(value=0)
+    self.var_create_proxys = tk.IntVar(value=0)
+    self.var_only_create_proxys = tk.IntVar(value=0),
+    self.var_codec_option = tk.StringVar(value="hap_alpha")
     self.var_scale_option = tk.StringVar(value="scale")
-    self.setup_radio(528,393,"Scale", self.var_scale_option, "scale", True)
-    self.setup_radio(672,393,"Pad", self.var_scale_option, "pad", True)
+
+
+    # -------------------------------- CHECKBOXES -------------------------------- #
+    self.setup_checkboxes(430,171,"Destination same as Source", self.var_destination_same_as_source)
+    self.setup_checkboxes(450,206,"Create HAP folder at Source", self.var_create_hap_folder_at_source)
+    self.setup_checkboxes(430,241,"Append HAP to filename (preserves version tag)", self.var_append_hap_to_file_name)
+    self.setup_checkboxes(430,276,"Advanced options", self.var_advanced_options)
+
+    # ---------------------------------------------------------------------------- #
+    #                               ADVANCED OPTIONS                               #
+    # ---------------------------------------------------------------------------- #
+
+    self.advanced_options_image = tk.PhotoImage(file=resource_path("GUI/assets/AdvancedMenu.png"))
+    self.advanced_options_bg = ttk.Label(self.root, image=self.advanced_options_image, borderwidth=0, style="TLabel")
+    self.advanced_options_bg.place(x=430, y=310, width=self.advanced_options_image.width(), height=self.advanced_options_image.height())
+    self.advanced_options_bg.image = self.advanced_options_image  # Keep a reference to the image to prevent garbage collection
+    self.advanced_options_bg.lower()
+
+    # ----------------------------------- RADIO ---------------------------------- #
+    self.setup_radio(454,351 ,"HAP", self.var_codec_option, "hap", True)
+    self.setup_radio(512,351 ,"HAP Alpha", self.var_codec_option, "hap_alpha", True)
+    self.setup_radio(570,351 ,"HAP Q", self.var_codec_option, "hap_q", True)
+
+    self.setup_radio(657,351,"SCALE", self.var_scale_option, "scale", True)
+    self.setup_radio(715,351,"PAD", self.var_scale_option, "pad", True)
+
+    # ----------------------------------- PROXY ---------------------------------- #
+    self.setup_checkboxes(450,431,"Create Proxys", self.var_create_proxys, True)
+    self.setup_checkboxes(470,461,"Only create Proxys", self.var_only_create_proxys, True)
+    
 
 def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -74,14 +94,18 @@ def load_font(self, font_path, size=12):
         return font_name
 
 def configure_styles(self):
-    # --------------------------------- VARIABLES -------------------------------- #
+    # ---------------------------------------------------------------------------- #
+    #                                   VARIABLES                                  #
+    # ---------------------------------------------------------------------------- #
     self.style_background = '#1d1d1d'
     self.style_progressbar_background = '#333333'
-    self.style_button_background = "#555555"
+    self.style_tree_background = '#2d2d2d'
+    self.style_button_background = "#2d2d2d"
     self.style_button_foreground = "#FFFFFF"
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
     # ---------------------------------- IMAGES ---------------------------------- #
+    self.advanced_options_image = PhotoImage(file=resource_path("GUI/assets/AdvancedMenu.png"))
     self.checkbox_on_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_on.png"))
     self.checkbox_off_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_off.png"))
     self.radio_on_image = PhotoImage(file=resource_path("GUI/assets/radio_on.png"))
@@ -92,15 +116,20 @@ def configure_styles(self):
     style.theme_use("default")
     style.layout('Custom.TCheckbutton', [('Checkbutton.label', {'sticky': 'nswe'})])
     style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
-    self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf", size=12)
+    self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf")
+    self.font_bold = self.load_font("GUI/assets/LiberationSans-Bold.ttf")
+
+    # ---------------------------------------------------------------------------- #
+    #                                    BUTTONS                                   #
+    # ---------------------------------------------------------------------------- #
+    style.configure("TButton", background=self.style_background, foreground=self.style_button_foreground, relief="raised", padding=(-1,-1), borderwidth=0, font=(self.font, 10))
+    style.map("TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
+
 
     # -------------------------------- INPUT TREE -------------------------------- #
-    style.configure("Treeview", background="5E5E5E", foreground="#FFFFFF", fieldbackground="#1a1a1a", relief="flat", padding=(0, 3), borderwidth=0)#, font=self.font)
+    style.configure("Treeview", background=self.style_tree_background, foreground="#FFFFFF", fieldbackground=self.style_tree_background, relief="flat", padding=(0, 5), borderwidth=0, font=(self.font, 10))
     # -------------------------------- OUTPUT TREE ------------------------------- #
-    style.configure("Destination.TLabel", background="#1a1a1a", foreground="#FFFFFF", padding=10, relief="flat", borderwidth=0)#, font=self.font)   
-    # ------------------------------ ENCODE BUTTONS ------------------------------ #
-    style.configure("TButton", background=self.style_background, foreground=self.style_background, relief="flat", padding=(0), borderwidth=0)
-    style.map("TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
+    style.configure("Destination.TLabel", background=self.style_tree_background, foreground="#FFFFFF", padding=(10,5), relief="flat", borderwidth=0, font=(self.font, 10))
 
     # -------------------------------- CHECKBOXES -------------------------------- #
     style.configure('Custom.TCheckbutton',
@@ -110,15 +139,17 @@ def configure_styles(self):
                     image=self.checkbox_off_image)
     style.map('Custom.TCheckbutton',
             image=[('selected', self.checkbox_on_image)])
-    style.configure("Checkbox.TLabel", background=self.style_background, foreground="#FFFFFF")
+    style.configure("Checkbox.TLabel", background=self.style_background, foreground="#FFFFFF", font=(self.font, 10))
     
     
     style.configure("TCheckbutton", background="#2E2E2E", foreground="#FFFFFF", relief="flat")
     style.map("TCheckbutton", background=[('active', '#2E2E2E')], indicatorcolor=[("selected", "#555555")], indicatorrelief=[('pressed', 'sunken'), ('!pressed', 'raised')])
-    style.configure("TCheckbutton", font=100)  # Adjust size as needed
+    style.configure("TCheckbutton", font=100)
 
     # -------------------------- Advanced Options Button ------------------------- #
-    style.configure("Advanced.TLabel", background=self.style_background, foreground="#FFFFFF")
+    # style.configure("Advanced.TLabel", background=self.style_background, foreground="#FFFFFF")
+    
+
 
     # ------------------------------- RADIO BUTTONS ------------------------------ #
     self.style.layout("TRadiobutton", [
@@ -152,11 +183,14 @@ def configure_styles(self):
                                         {'side': 'left', 'sticky': 'ns'})],
                         'sticky': 'nswe'}), 
                         ('Horizontal.Progressbar.label', {'sticky': 'nswe'})])
-    style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_background, background='green', borderwidth=0)
+    style.configure('text.Horizontal.TProgressbar', relief='sunken', text='Not Currently Encoding', foreground="white", anchor='center', troughcolor=self.style_background, background='green', borderwidth=0, font=(self.font, 9))
     
-    style.configure("Dialog.TLabel", background=self.style_background, foreground="#FFFFFF")
-    style.configure("Dialog.TButton", background="black", foreground="white", relief="flat", padding=(0), borderwidth=0)
-    style.map("Dialog.TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
+    # ---------------------------------------------------------------------------- #
+    #                                     POPUP                                    #
+    # ---------------------------------------------------------------------------- #
+    style.configure("popup.TLabel", background=self.style_background, foreground="#FFFFFF", font=(self.font, 11), anchor="center")
+    style.configure("popup.TButton", background="black", foreground="white", relief="flat", padding=(0), borderwidth=0)
+    style.map("popup.TButton", background=[('pressed', self.style_background), ('active', self.style_background)])
 
 # ---------------------------------------------------------------------------- #
 #                                     INPUT                                    #
@@ -164,117 +198,151 @@ def configure_styles(self):
 # ---------------------------------------------------------------------------- #
 #                                 INPUT BUTTONS                                #
 # ---------------------------------------------------------------------------- #
+def setup_button(self, x, y, text, option, image_path=None):
+    func = None
+    self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
+    width = self.image.width()
+    height = self.image.height()
 
-def setup_button(self, x, y, width, height, label_text, option, image_path=None):
-    
-    func = partial(self.open_file_or_folder_dialog, option)
 
-    if image_path:
-        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-        # Retrieve the width and height from the image
-        width = self.image.width()
-        height = self.image.height()
-    else:
-        self.image = None
-
-    self.button = ttk.Button(self.root, text=label_text, command=func,style="TButton", image=self.image)
+    self.button = ttk.Button(self.root, text=text, command=func,style="TButton", image=self.image, compound='center')
     
     if self.image:
         self.button.image = self.image  # Keep a reference to prevent garbage collection
 
-
     self.button.place(x=x, y=y, width=width, height=height)
     self.button.drop_target_register(DND_FILES)
-    # self.button.dnd_bind('<<Drop>>', self.source_dropped_on_button)
+    self.button['takefocus'] = False
     if option == "INPUT_FILE" or option == "INPUT_FOLDER":
+        self.button["command"] = partial(self.open_file_or_folder_dialog, option)
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))
     elif option == "DESTINATION_FOLDER":
+        self.button["command"] = partial(self.open_file_or_folder_dialog, option)
         self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
     elif option == "CLEAR_SELECTION":
         self.button["command"] = self.clear_selection
     elif option == "REMOVE_FILES":
         self.button["command"] = self.remove_file_from_tree
-
-    # self.button.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
-    self.button.bind('<Button-1>', func)
-
-# ---------------------------------------------------------------------------- #
-#                                  INPUT TREE                                  #
-# ---------------------------------------------------------------------------- #
-
-def setup_tree_input(self, x, y, width, height, image_path=None):
-    if image_path:
-        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-        # Retrieve the width and height from the image
-        width = self.image.width()
-        height = self.image.height()
+    elif option == "ENCODE_SELECTED":
+        self.button["command"] = partial(self.on_encode_click, True)
+    elif option == "ENCODE_ALL":
+        self.button["command"] = partial(self.on_encode_click, False)
     else:
-        self.image = None
+        raise ValueError("Invalid argument. Please use 'INPUT_FILE', 'INPUT_FOLDER', 'DESTINATION_FOLDER', 'CLEAR_SELECTION', 'REMOVE_FILES', 'ENCODE_SELECTED', or 'ENCODE_ALL'.")
+    
 
-    self.tree_input_image = tk.Label(self.root, image=self.image)
-    self.tree_input_image.place(x=x, y=y, width=width, height=height)
+    # self.button.bind('<Button-1>', func)
 
-    if self.image:
-        self.tree_iinput_mage = self.image  # Keep a reference to prevent garbage collection
 
-    offset = 6
-
-    self.tree = ttk.Treeview(self.root)
-    self.tree.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
-    self.tree['show'] = 'tree'
-    self.tree.drop_target_register(DND_FILES)
-    # self.tree.dnd_bind('<<Drop>>', self.drop_to_treeview)  # Bind the Drop event
-    self.tree.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))  # Bind the Drop event
-
-    self.drag_prompt_id = self.tree.insert("", "end", text="Drop source file / folder here")
 
     # ---------------------------------------------------------------------------- #
     #                                ENCODE BUTTONS                                #
     # ---------------------------------------------------------------------------- #
 
-def setup_encode_buttons(self, x, y, width, height, label_text, func, image_path=None):
-        if image_path:
-            self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-            # Retrieve the width and height from the image
-            width = self.image.width()
-            height = self.image.height()
-        else:
-            self.image = None
+# def setup_encode_buttons(self, x, y, width, height, text, func, image_path=None):
+#         if image_path:
+#             self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
+#             # Retrieve the width and height from the image
+#             width = self.image.width()
+#             height = self.image.height()
+#         else:
+#             self.image = None
         
-        self.button_encode = ttk.Button(self.root, text=label_text, style="TButton", command=func, image=self.image)
+#         self.button_encode = ttk.Button(self.root, text=text, style="TButton", command=func, image=self.image)
  
-        if self.image:
-            self.button_encode.image = self.image  # Keep a reference to prevent garbage collection
+#         if self.image:
+#             self.button_encode.image = self.image  # Keep a reference to prevent garbage collection
 
-        self.button_encode.place(x=x, y=y)
+#         self.button_encode.place(x=x, y=y)
 
-    # ---------------------------------------------------------------------------- #
-    #                                  OUTPUT TREE                                 #
-    # ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+#                                  INPUT TREE                                  #
+# ---------------------------------------------------------------------------- #
 
-def setup_output_tree(self, x, y, width, height, image_path=None):
-    if image_path:
-        self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-        # Retrieve the width and height from the image
-        width = self.image.width()
-        height = self.image.height()
-    else:
-        self.image = None
+def setup_tree(self, x, y, tree_type="INPUT", image_path=None):
+    
+    image = tk.PhotoImage(file=resource_path(image_path))
+    img_width = image.width()
+    img_height = image.height()
 
+    tree_image = tk.Label(self.root, image=image)
+    tree_image.place(x=x, y=y, width=img_width, height=img_height)
+    tree_image.image = image  # Keep a reference to the image to prevent garbage collection
 
-    self.tree_output_image = tk.Label(self.root, image=self.image)
-    self.tree_output_image.place(x=x, y=y, width=width, height=height)
-
-    if self.image:
-        self.tree_output_image = self.image  # Keep a reference to prevent garbage collection
 
     offset = 6
+    adjusted_x = x + (offset / 2)
+    adjusted_y = y + (offset / 2)
+    adjusted_width = img_width - offset
+    adjusted_height = img_height - offset
 
-    self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel")
-    self.destination_label.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
-    self.destination_label.drop_target_register(DND_FILES)
-    self.destination_label.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
-    # self.destination_label.bind('<Button-1>', self.open_folder_dialog)
+    if tree_type == "INPUT":
+        self.tree = ttk.Treeview(self.root)
+        self.tree.place(x=adjusted_x, y=adjusted_y, width=adjusted_width, height=adjusted_height)
+        self.tree['show'] = 'tree'
+        self.tree.drop_target_register(DND_FILES)
+        self.tree.dnd_bind('<<Drop>>', lambda e: self.handle_input_drop(e.data))
+        self.drag_prompt_id = self.tree.insert("", "end", text="Drop source file / folder here")
+    elif tree_type == "OUTPUT":
+        self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=300, style="Destination.TLabel", anchor="nw")
+        self.destination_label.place(x=adjusted_x, y=adjusted_y, width=adjusted_width, height=adjusted_height)
+        self.destination_label.drop_target_register(DND_FILES)
+        self.destination_label.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
+    else:
+        raise ValueError("tree_type must be 'INPUT' or 'OUTPUT'")
+
+
+
+# def setup_tree_input(self, x, y, width, height, image_path=None):
+
+#     self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
+#     # Retrieve the width and height from the image
+#     width = self.image.width()
+#     height = self.image.height()
+
+#     self.tree_input_image = tk.Label(self.root, image=self.image)
+#     self.tree_input_image.place(x=x, y=y, width=width, height=height)
+
+#     if self.image:
+#         self.tree_input_mage = self.image  # Keep a reference to prevent garbage collection
+
+#     offset = 6
+
+#     self.tree = ttk.Treeview(self.root)
+#     self.tree.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
+#     self.tree['show'] = 'tree'
+#     self.tree.drop_target_register(DND_FILES)
+#     # self.tree.dnd_bind('<<Drop>>', self.drop_to_treeview)  # Bind the Drop event
+#     self.tree.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))  # Bind the Drop event
+
+#     self.drag_prompt_id = self.tree.insert("", "end", text="Drop source file / folder here")
+
+
+#     # ---------------------------------------------------------------------------- #
+#     #                                  OUTPUT TREE                                 #
+#     # ---------------------------------------------------------------------------- #
+
+# def setup_output_tree(self, x, y, width, height, image_path=None):
+
+#     self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
+#     # Retrieve the width and height from the image
+#     width = self.image.width()
+#     height = self.image.height()
+
+
+#     self.tree_output_image = tk.Label(self.root, image=self.image)
+#     self.tree_output_image.place(x=x, y=y, width=width, height=height)
+
+#     if self.image:
+#         self.tree_output_image = self.image  # Keep a reference to prevent garbage collection
+
+#     offset = 6
+
+#     self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=366, style="Destination.TLabel", anchor="nw") #nw
+#     self.destination_label.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
+#     self.destination_label.drop_target_register(DND_FILES)
+#     self.destination_label.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
+#     # self.destination_label.bind('<Button-1>', self.open_folder_dialog)
 
 # ---------------------------------------------------------------------------- #
 #                                 PROGRESS BAR                                 #
@@ -315,7 +383,6 @@ def setup_progressbar(self,x,y,width,height,image_path=None):
 
 def setup_checkboxes(self, x, y, text, variable, hidden=None):
     checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda: self.handle_checkbox_toggle())
-    # checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda var=command: self.handle_checkbox_toggle(var))
     checkbox.place(x=x, y=y)
 
     label = ttk.Label(self.root, text=text, style="Checkbox.TLabel")
@@ -326,46 +393,32 @@ def setup_checkboxes(self, x, y, text, variable, hidden=None):
     # Store checkbox and label in a dictionary
     self.advanced_options_widgets[text] = (checkbox, label)
 
-    # In your setup_checkboxes method:
-    self.placement_configs[text] = {
-        'box': {'x': x, 'y': y},  # 'box' here represents the checkbox
-        'label': {'x': label_x_offset, 'y': label_y_offset}
-    }
-
     if hidden:
-        checkbox.place_forget()
-        label.place_forget()
-
+        checkbox.lower()
+        label.lower()
 
 def handle_checkbox_toggle(self):
-    def hide_advanced_options(self, key):
-        self.radio, self.label = self.advanced_options_widgets[key]
-        self.radio.place_forget()
-        self.label.place_forget()
-    def show_advanced_options(self, key):
+    def hide_advanced_options(key):
+        self.advanced_options_bg.lower()
         radio, label = self.advanced_options_widgets[key]
-        radio.place(**self.placement_configs[key]['box'])
-        label.place(**self.placement_configs[key]['label'])
+        radio.lower()
+        label.lower()
+
+    def show_advanced_options(key):
+        radio, label = self.advanced_options_widgets[key]
+        radio.lift()
+        label.lift()
 
     if not self.var_destination_same_as_source.get():
         self.var_create_hap_folder_at_source.set(False)
-    if self.var_advanced_options.get():
-        show_advanced_options(self, "hap")
-        show_advanced_options(self, "hap_alpha")
-        show_advanced_options(self, "hap_q")
-        show_advanced_options(self, "scale")
-        show_advanced_options(self, "pad")
-        show_advanced_options(self, "Create Proxys")
-        show_advanced_options(self, "Only create Proxys")
-    else:
-        hide_advanced_options(self, "hap")
-        hide_advanced_options(self, "hap_alpha")
-        hide_advanced_options(self, "hap_q")
-        hide_advanced_options(self, "scale")
-        hide_advanced_options(self, "pad")
-        hide_advanced_options(self, "Create Proxys")
-        hide_advanced_options(self, "Only create Proxys")
 
+    if self.var_advanced_options.get():
+        self.advanced_options_bg.lift()
+        for option_key in ["hap", "hap_alpha", "hap_q", "scale", "pad", "Create Proxys", "Only create Proxys"]:
+            show_advanced_options(option_key)
+    else:
+        for option_key in ["hap", "hap_alpha", "hap_q", "scale", "pad", "Create Proxys", "Only create Proxys"]:
+            hide_advanced_options(option_key)
 
 def setup_radio(self, x, y, text, variable, value, hidden=None):
     radio = ttk.Radiobutton(self.root, text=None, variable=variable, value=value, style='TRadiobutton')
@@ -379,15 +432,10 @@ def setup_radio(self, x, y, text, variable, value, hidden=None):
     # Store radio and label in a dictionary
     self.advanced_options_widgets[value] = (radio, label)
 
-    # Store placement configs for both radio and label
-    self.placement_configs[value] = {
-        'box': {'x': x, 'y': y},
-        'label': {'x': label_x_offset, 'y': label_y_offset, 'anchor': "center"}
-    }
-
     if hidden:
-        radio.place_forget()
-        label.place_forget()
+        radio.lower()
+        label.lower()
+
 
 def update_progress_text(self, text):
     self.style.configure('text.Horizontal.TProgressbar', text=text)
@@ -421,73 +469,74 @@ def console_log_progress(self, percentage):
 # ---------------------------------------------------------------------------- #
 #                            OVERWRITE CONFIRMATION                            #
 # ---------------------------------------------------------------------------- #
-def trigger_overwrite_popup(self):
-    dialog = tk.Toplevel(self.root)
-    dialog.title("Overwrite Confirmation")
+def trigger_overwrite_popup(self, message):
+    popup = tk.Toplevel(self.root)
+    popup.title("Overwrite Confirmation")
+    popup.geometry("350x180") 
+    # popup.configure(bg="#1a1a1a")
 
-    # Set the size of the dialog
-    dialog.geometry("350x180")  # Width x Height
-    # Set the dialog's background color
-    dialog.configure(bg="#1a1a1a")
-
-    # Load the background image
     self.popup_bg_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Background.png"))
-    popup_bg_label = tk.Label(dialog, image=self.popup_bg_image, bd=0)
+    popup_bg_label = tk.Label(popup, image=self.popup_bg_image, bd=0)
     popup_bg_label.place(x=0, y=0)
-    # dialog.geometry(f"{self.bg_image.width()}x{self.bg_image.height()}")
-
-    # Make the dialog non-resizable
-    dialog.resizable(False, False)
+    popup.resizable(False, False)
     
-    # Use the custom style for the label inside the dialog
-    msg = ttk.Label(dialog, text="The file already exists. Do you want to overwrite it?", style="Dialog.TLabel")
-    msg.pack(pady=10, padx=10)
+    header_text = "The file already exists. Do you want to overwrite it?"
+    import os
+    message_prefix = os.path.dirname(message)
+    message_suffix = os.path.basename(message)
+    # Use the custom style for the label inside the popup
+    popup_header = ttk.Label(popup, text=header_text, style="popup.TLabel", anchor='center', justify='center', font=(self.font, 11))
+    popup_header.pack(pady=10, padx=10)
+    popup_message = ttk.Label(popup, text=message_prefix +"\n" + message_suffix, style="popup.TLabel", anchor='center', font=(self.font, 10))
+    popup_message.pack(pady=10, padx=10)
     
     def on_yes_all():
-        dialog.result = ("ALL")
-        dialog.destroy()
+        popup.result = ("ALL")
+        popup.destroy()
 
     def on_yes():
-        dialog.result = ("YES")
-        dialog.destroy()
+        popup.result = ("YES")
+        popup.destroy()
 
     def on_skip():
-        dialog.result = ("SKIP")
-        dialog.destroy()
+        popup.result = ("SKIP")
+        popup.destroy()
 
+    self.popup_button_image = tk.PhotoImage(file=resource_path("GUI/assets/Button_Small.png"))
+    width = self.popup_button_image.width()
+    height = self.popup_button_image.height()
 
-    self.yes_all_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_YesAll.png"))
-    yes_all_btn = ttk.Button(dialog, text="Yes to all", command=on_yes_all, style="Dialog.TButton", image=self.yes_all_image)
-    yes_all_btn.place(x=10, y=130, width=self.yes_all_image.width(), height=self.yes_all_image.height())
+    # yes_all_btn = ttk.Button(popup, text="Yes to all", command=on_yes_all, style="popup.TButton", image=self.popup_button_image)
+    # yes_all_btn.place(x=10, y=130, width=self.popup_button_image.width(), height=self.popup_button_image.height())
 
-    self.yes_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Yes.png"))
-    yes_btn = ttk.Button(dialog, text="Yes", command=on_yes, style="Dialog.TButton", image=self.yes_image)
-    yes_btn.place(x=125, y=130, width=self.yes_image.width(), height=self.yes_image.height())
+    yes_btn = ttk.Button(popup, text="Yes", command=on_yes, style="TButton", image=self.popup_button_image, compound='center')
+    yes_btn.place(x=125, y=130, width=width, height=height)
+    yes_btn['takefocus'] = False
 
-    self.skip_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Skip.png"))
-    skip_btn = ttk.Button(dialog, text="Skip", command=on_skip, style="Dialog.TButton", image=self.skip_image)
-    skip_btn.place(x=240, y=130, width=self.skip_image.width(), height=self.skip_image.height())
+    skip_btn = ttk.Button(popup, text="No", command=on_skip, style="TButton", image=self.popup_button_image, compound='center')
+    skip_btn.place(x=240, y=130, width=width, height=height)
+    skip_btn['takefocus'] = False
 
-    # Force the dialog to update its layout and dimensions
-    dialog.update_idletasks()
+    # Force the popup to update its layout and dimensions
+    popup.update_idletasks()
 
-    # Center the dialog relative to its parent
+    # Center the popup relative to its parent
     parent_x = self.root.winfo_x()
     parent_y = self.root.winfo_y()
     parent_width = self.root.winfo_width()
     parent_height = self.root.winfo_height()
 
-    dialog_width = dialog.winfo_width()
-    dialog_height = dialog.winfo_height()
+    popup_width = popup.winfo_width()
+    popup_height = popup.winfo_height()
 
-    dialog_x = parent_x + (parent_width // 2) - (dialog_width // 2)
-    dialog_y = parent_y + (parent_height // 2) - (dialog_height // 2)
+    popup_x = parent_x + (parent_width // 2) - (popup_width // 2)
+    popup_y = parent_y + (parent_height // 2) - (popup_height // 2)
 
-    dialog.geometry(f"+{dialog_x}+{dialog_y}")
+    popup.geometry(f"+{popup_x}+{popup_y}")
 
-    dialog.lift()
-    dialog.grab_set()
-    dialog.wait_window()
+    popup.lift()
+    popup.grab_set()
+    popup.wait_window()
 
-    return dialog.result
+    return popup.result
 
