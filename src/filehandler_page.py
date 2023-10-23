@@ -107,6 +107,7 @@ def populate_file_tree(self, parent, path):
     # ------------------------ OPEN DIRECTORES IN TREE ----------------------- #
     check_file_tree(self)
 
+#TODO Fix this, edge case with {} in file names - only when drag and drop
 def display_destination_folder(self, folder_path):
     """Displays the selected destination folder."""
     
