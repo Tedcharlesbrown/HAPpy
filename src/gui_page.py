@@ -50,19 +50,19 @@ def setup_ui(self):
     self.var_advanced_options = tk.IntVar(value=0)
     self.setup_checkboxes(430,263,"Advanced options", self.var_advanced_options)
     self.var_create_proxys = tk.IntVar(value=0)
-    self.setup_checkboxes(455,444,"Create Proxys", self.var_create_proxys)
-    self.var_only_create_proxys = tk.IntVar(value=0)
-    self.setup_checkboxes(480,467,"Only create Proxys", self.var_only_create_proxys)
+    self.setup_checkboxes(455,444,"Create Proxys", self.var_create_proxys, True)
+    self.var_only_create_proxys = tk.IntVar(value=0),
+    self.setup_checkboxes(480,470,"Only create Proxys", self.var_only_create_proxys, True)
     
     # ----------------------------------- RADIO ---------------------------------- #
     self.var_codec_option = tk.StringVar(value="HAP_ALPHA")
-    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "HAP")
-    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "HAP_ALPHA")
-    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "HAP_Q")
+    self.setup_radio(488,315 ,"HAP", self.var_codec_option, "HAP", True)
+    self.setup_radio(597,315 ,"HAP ALPHA", self.var_codec_option, "HAP_ALPHA", True)
+    self.setup_radio(713,315 ,"HAP Q", self.var_codec_option, "HAP_Q", True)
 
     self.var_scale_pad_option = tk.StringVar(value="SCALE")
-    self.setup_radio(488,370 ,"Scale", self.var_scale_pad_option, "SCALE")
-    self.setup_radio(713,370 ,"Pad", self.var_scale_pad_option, "PAD")
+    self.setup_radio(528,393,"Scale", self.var_scale_pad_option, "SCALE", True)
+    self.setup_radio(672,393,"Pad", self.var_scale_pad_option, "PAD", True)
 
 def load_font(self, font_path, size=12):
         # Register the font with tkinter's font factory
@@ -306,28 +306,81 @@ def setup_progressbar(self,x,y,width,height,image_path=None):
 #                                  CHECKBOXES                                  #
 # ---------------------------------------------------------------------------- #
 
-def setup_checkboxes(self, x, y, text, variable, command=None):
+def setup_checkboxes(self, x, y, text, variable, hidden=None):
     checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda: self.handle_checkbox_toggle())
     # checkbox = ttk.Checkbutton(self.root, text=text, variable=variable, style='Custom.TCheckbutton', command=lambda var=command: self.handle_checkbox_toggle(var))
     checkbox.place(x=x, y=y)
 
     label = ttk.Label(self.root, text=text, style="Checkbox.TLabel")
-    label.place(x=x + 25, y=y-1)  
+    label_x_offset = x + 25
+    label_y_offset = y - 1
+    label.place(x=label_x_offset, y=label_y_offset)  
+
+    # Store checkbox and label in a dictionary
+    self.advanced_options_widgets[text] = (checkbox, label)
+
+    # In your setup_checkboxes method:
+    self.placement_configs[text] = {
+        'box': {'x': x, 'y': y},  # 'box' here represents the checkbox
+        'label': {'x': label_x_offset, 'y': label_y_offset}
+    }
+
+    if hidden:
+        checkbox.place_forget()
+        label.place_forget()
+
 
 def handle_checkbox_toggle(self):
+    def hide_advanced_options(self, key):
+        self.radio, self.label = self.advanced_options_widgets[key]
+        self.radio.place_forget()
+        self.label.place_forget()
+    def show_advanced_options(self, key):
+        radio, label = self.advanced_options_widgets[key]
+        radio.place(**self.placement_configs[key]['box'])
+        label.place(**self.placement_configs[key]['label'])
+
     if not self.var_destination_same_as_source.get():
         self.var_create_hap_folder_at_source.set(False)
+    if self.var_advanced_options.get():
+        show_advanced_options(self, "HAP")
+        show_advanced_options(self, "HAP_ALPHA")
+        show_advanced_options(self, "HAP_Q")
+        show_advanced_options(self, "SCALE")
+        show_advanced_options(self, "PAD")
+        show_advanced_options(self, "Create Proxys")
+        show_advanced_options(self, "Only create Proxys")
+    else:
+        hide_advanced_options(self, "HAP")
+        hide_advanced_options(self, "HAP_ALPHA")
+        hide_advanced_options(self, "HAP_Q")
+        hide_advanced_options(self, "SCALE")
+        hide_advanced_options(self, "PAD")
+        hide_advanced_options(self, "Create Proxys")
+        hide_advanced_options(self, "Only create Proxys")
 
-def setup_radio(self, x, y, text, variable, value, command=None):
+
+def setup_radio(self, x, y, text, variable, value, hidden=None):
     radio = ttk.Radiobutton(self.root, text=None, variable=variable, value=value, style='TRadiobutton')
     radio.place(x=x, y=y)
 
     label = ttk.Label(self.root, text=text, style="Radio.TLabel")
-    # label.place(x=x, y=y+20) 
-    # label.place(x=x - (self.radio_on_image.width() // 2), y=y+20)
-    label.place(x=x+9, y=y+30, anchor="center")
+    label_x_offset = x + 9
+    label_y_offset = y + 30
+    label.place(x=label_x_offset, y=label_y_offset, anchor="center")
 
+    # Store radio and label in a dictionary
+    self.advanced_options_widgets[value] = (radio, label)
 
+    # Store placement configs for both radio and label
+    self.placement_configs[value] = {
+        'box': {'x': x, 'y': y},
+        'label': {'x': label_x_offset, 'y': label_y_offset, 'anchor': "center"}
+    }
+
+    if hidden:
+        radio.place_forget()
+        label.place_forget()
 
 def update_progress_text(self, text):
     self.style.configure('text.Horizontal.TProgressbar', text=text)

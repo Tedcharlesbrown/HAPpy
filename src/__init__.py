@@ -9,7 +9,13 @@ class HAPPY:
         self.root = root
         self.encode_queue = queue.Queue()
         self.encode_lock = threading.Lock()
-        self.codec_option = tk.StringVar()
+        # self.codec_option = tk.StringVar()
+
+        # Advanced Options
+        self.advanced_options_widgets = {}
+        self.placement_configs = {}
+
+
         self.configure_styles()
         self.setup_ui()
         self.acceptable_containers = [".mkv", ".mp4", ".mov", ".asf", ".avi", ".mxf", ".m2p", ".ps", ".ts", ".m2ts", ".mts", ".vob", ".evo", ".3gp", ".3g2", ".f4v", ".flv", ".ogv", ".ogx", ".webm", ".rmvb", ".divx", ".png", ".jpg", ".jpeg", ".tiff", ".svg"]
@@ -18,6 +24,9 @@ class HAPPY:
         self.elapsed_files = 1
         self.total_files = 0
         self.console = logger
+
+
+        # Encoding
         self.encoder = Encoder()
         self.overwrite_all_files = False
 
@@ -25,9 +34,7 @@ class HAPPY:
         self.progress_bar_update = True
         self.progress_bar_next_update = 25
 
-        # self.console.log(str(self.encoder))
-        # self.console.log(self.encoder.get_version("ffmpeg"),"INIT")
-        # self.console.log(self.encoder.get_version("ffprobe"),"INIT")
+        
 
         
 
