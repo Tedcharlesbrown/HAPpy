@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/Uses-FFmpeg-%23007808?logo=FFmpeg)](http://ffmpeg.org)
 [![FFmpeg](https://img.shields.io/badge/License-GNU3.0-%23A42E2B?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html#license-text)
 
-HAPpy is a video encoding tool designed specifically for the HAP codec. With its user-friendly interface, you can easily encode videos using the HAP format without any hassle.
+HAPpy is a video encoding tool that wraps FFmpeg into a graphical user interface, designed specifically for the HAP codec.
 
 ## Features
 - Intuitive GUI: Easily select and encode multiple videos with a few clicks.
@@ -34,7 +34,8 @@ HAPpy is a video encoding tool designed specifically for the HAP codec. With its
 
 
 ## Why HAPpy?
-While there are several video codecs available, HAP offers a balance between performance and quality. HAPpy provides a straightforward way to encode videos to the HAP format without the need for complex configurations.
+- HAPpy provides a straightforward way to encode videos to the HAP format without the need to download and install other alternatives.
+- HAPpy contains a pre-compiled version of FFmpeg with HAP included - so no searching for the correct version and no setting PATH variables.
 
 ## Why not NotchLC?
 Besides my personal preference for HAP (more layers and better performance at the trade off of slightly less quality)... NotchLC is a proprietary codec and has no plans on being shared outside of Notch and their own Media Encoder plugin. This means that in cannot be used in open source programs such as this one or FFmpeg. [Notch has made it clear that they are not interested in open sourcing their codec](https://forum.notch.one/t/command-line-encode-utility/851/13). If this is something you need, and as it becomes more difficult to encode to NotchLC due to Adobe / Apple's silicone, I would recommend contacting Notch.
@@ -54,8 +55,14 @@ This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the [GPLv3
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+<!-- You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
+
+## Special Thanks / Acknowledgments
+[FFmpeg](https://github.com/FFmpeg/FFmpeg) - FFmpeg is a trademark of Fabric Bellard  
+[Vidvox](https://github.com/Vidvox/hap) - Created HAP codec, originally written by Tom Butterworth and commissioned by VIDVOX, 2012.
+
+
 
 ## Support the project
 If you find this software useful, please consider buying me a coffee.
