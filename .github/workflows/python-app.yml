@@ -20,24 +20,22 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
-        # ... (other pip installations)
-        if (Test-Path requirements.txt) {pip install -r requirements.txt}
+        pip install tkinterdnd2
+        pip install ffmpeg-python
       shell: pwsh
 
     - name: Create Executable
       run: |
-        pyinstaller --noconfirm \
-                    --name=main \
-                    --console \
-                    --path "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/main.py" \
-                    --add-binary "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/FFMPEG/ffprobe.exe;FFMPEG/" \
-                    --add-binary "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/FFMPEG/ffmpeg.exe;FFMPEG/" \
-                    --add-data "C:/Users/TedCh/AppData/Local/Programs/Python/Python311/Lib/site-packages/tkinterdnd2;tkinterdnd2/" \
-                    --add-data "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/GUI/assets;GUI/assets/" \
-                    --hidden-import=PIL.Image \
-                    --hidden-import=PIL._tkinter_finder \
-                    main.py
+        pyinstaller --noconfirm ^
+                  --name=main ^
+                  --console ^
+                  --path "./main.py" ^
+                  --add-binary "./FFMPEG/ffprobe.exe;FFMPEG/" ^
+                  --add-binary "./FFMPEG/ffmpeg.exe;FFMPEG/" ^
+                  --add-data "./GUI/assets" ^
+                  --hidden-import=PIL.Image ^
+                  --hidden-import=PIL._tkinter_finder ^
+                  main.py
 
     - name: Upload Executable
       uses: actions/upload-artifact@v2
