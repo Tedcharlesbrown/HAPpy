@@ -17,8 +17,8 @@ def setup_constants(self):
 def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
     self.bg = PhotoImage(file=resource_path("GUI/assets/background.png")) 
-    self.background = ttk.Label(self.root, image = self.bg) 
-    self.background.place(x = 0, y = 0) 
+    self.background = ttk.Label(self.root, image = self.bg, border=0) 
+    self.background.place(x = 0, y = 0)
     # ----------------------------------- INPUT -------------------------------`--- #
     # ------------------------- Select A File & Select A Folder ------------------------ #
     self.setup_button(x=25, y=20, text="Select a file", option="INPUT_FILE", image_path="GUI/assets/Button_Medium.png")
