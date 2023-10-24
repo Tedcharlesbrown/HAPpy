@@ -26,16 +26,18 @@ jobs:
 
     - name: Create Executable
       run: |
-        pyinstaller --noconfirm ^
-                  --name=main ^
-                  --console ^
-                  --path "./main.py" ^
-                  --add-binary "./FFMPEG/ffprobe.exe;FFMPEG/" ^
-                  --add-binary "./FFMPEG/ffmpeg.exe;FFMPEG/" ^
-                  --add-data "./GUI/assets" ^
-                  --hidden-import=PIL.Image ^
-                  --hidden-import=PIL._tkinter_finder ^
-                  main.py
+        pyinstaller --noconfirm `
+                --name=main `
+                --console `
+                --path "./main.py" `
+                --add-binary "./FFMPEG/ffprobe.exe;FFMPEG/" `
+                --add-binary "./FFMPEG/ffmpeg.exe;FFMPEG/" `
+                --add-data "./GUI/assets" `
+                --hidden-import=PIL.Image `
+                --hidden-import=PIL._tkinter_finder `
+                main.py
+      shell: pwsh
+
 
     - name: Upload Executable
       uses: actions/upload-artifact@v2
