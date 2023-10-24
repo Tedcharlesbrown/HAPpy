@@ -33,11 +33,12 @@ jobs:
                 --path "./main.py" `
                 --add-binary "./FFMPEG/ffprobe.exe;FFMPEG/" `
                 --add-binary "./FFMPEG/ffmpeg.exe;FFMPEG/" `
-                --add-data "./GUI/assets" `
+                --add-data "./GUI/assets;." `
                 --hidden-import=PIL.Image `
                 --hidden-import=PIL._tkinter_finder `
                 main.py
       shell: pwsh
+
 
 
     - name: Upload Executable
