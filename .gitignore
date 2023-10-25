@@ -5,3 +5,4 @@ FFMPEG/ffprobe.exe
 .HAP-PY Log.csv
 Export/.HAPpy Log.csv
 Export/main.exe
+*.csv
