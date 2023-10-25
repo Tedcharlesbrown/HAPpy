@@ -4,3 +4,5 @@ FFMPEG/ffplay.exe
 FFMPEG/ffprobe.exe
 Export/main.exe
 *.csv
+Export/HAPpy/
+Export/*.exe

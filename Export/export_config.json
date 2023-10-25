@@ -7,15 +7,23 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/main.py"
+   "value": "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/src/main.py"
   },
   {
    "optionDest": "onefile",
-   "value": false
+   "value": true
   },
   {
    "optionDest": "console",
    "value": true
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/TedCh/OneDrive/Documents/GitHub/HAPpy/GUI/assets/icon.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "HAPpy"
   },
   {
    "optionDest": "ascii",
