@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk,PhotoImage, font
 from functools import partial
 from tkinterdnd2 import DND_FILES, TkinterDnD
+import os
 
 from autopytoexe_path import resource_path
 
@@ -20,13 +21,22 @@ def setup_constants(self):
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
 
+def setup_ui(self, option):
 
-def setup_ui(self):
+
+
+    if option:
+        self.setup_ui_encode()
+    else:
+        pass
+
+
+def setup_ui_encode(self):
     # -------------------------------- BACKGROUND -------------------------------- #
     self.bg = PhotoImage(file=resource_path("background.png")) 
     self.background = ttk.Label(self.root, image = self.bg, border=0) 
     self.background.place(x = 0, y = 0)
-    # ----------------------------------- INPUT -------------------------------`--- #
+    # ----------------------------------- INPUT ---------------------------------- #
     # ------------------------- Select A File & Select A Folder ------------------------ #
     self.setup_button(x=25, y=20, text="Select a file", option="INPUT_FILE", image_path="Button_Medium.png")
     self.setup_button(x=204, y=20, text="Select a folder", option="INPUT_FOLDER", image_path="Button_Medium.png")
@@ -58,7 +68,7 @@ def setup_ui(self):
     self.var_create_proxys = tk.IntVar(value=0)
     self.var_only_create_proxys = tk.IntVar(value=0),
     self.var_codec_option = tk.StringVar(value="hap_alpha")
-    self.var_scale_option = tk.StringVar(value="scale")
+    self.var_scale_option = tk.StringVar(value="stretch")
 
 
     # -------------------------------- CHECKBOXES -------------------------------- #
@@ -82,8 +92,9 @@ def setup_ui(self):
     self.setup_radio(512,351 ,"HAP Alpha", self.var_codec_option, "hap_alpha", True)
     self.setup_radio(570,351 ,"HAP Q", self.var_codec_option, "hap_q", True)
 
-    self.setup_radio(657,351,"SCALE", self.var_scale_option, "scale", True)
-    self.setup_radio(715,351,"PAD", self.var_scale_option, "pad", True)
+    self.setup_radio(657,351,"Stretch", self.var_scale_option, "stretch", True)
+    # self.setup_radio(686,351,"Scale", self.var_scale_option, "scale", True)
+    self.setup_radio(715,351,"Pad", self.var_scale_option, "pad", True)
 
     # ----------------------------------- PROXY ---------------------------------- #
     self.setup_checkboxes(450,431,"Create Proxys", self.var_create_proxys, True)
@@ -331,10 +342,10 @@ def handle_checkbox_toggle(self):
 
     if self.var_advanced_options.get():
         self.advanced_options_bg.lift()
-        for option_key in ["hap", "hap_alpha", "hap_q", "scale", "pad", "Create Proxys", "Only create Proxys"]:
+        for option_key in ["hap", "hap_alpha", "hap_q", "stretch", "pad", "Create Proxys", "Only create Proxys"]:
             show_advanced_options(option_key)
     else:
-        for option_key in ["hap", "hap_alpha", "hap_q", "scale", "pad", "Create Proxys", "Only create Proxys"]:
+        for option_key in ["hap", "hap_alpha", "hap_q", "stretch", "pad", "Create Proxys", "Only create Proxys"]:
             hide_advanced_options(option_key)
 
 def setup_radio(self, x, y, text, variable, value, hidden=None):
@@ -389,7 +400,7 @@ def console_log_progress(self, percentage):
 def trigger_overwrite_popup(self, message):
     popup = tk.Toplevel(self.root)
     popup.title("Overwrite Confirmation")
-    popup.geometry("350x180") 
+    popup.geometry("400x200") 
     # popup.configure(bg="#1a1a1a")
 
     self.popup_bg_image = tk.PhotoImage(file=resource_path("Popup_Background.png"))
@@ -398,7 +409,7 @@ def trigger_overwrite_popup(self, message):
     popup.resizable(False, False)
     
     header_text = "The file already exists. Do you want to overwrite it?"
-    import os
+    
     message_prefix = os.path.dirname(message)
     message_suffix = os.path.basename(message)
     # Use the custom style for the label inside the popup
@@ -406,10 +417,6 @@ def trigger_overwrite_popup(self, message):
     popup_header.pack(pady=10, padx=10)
     popup_message = ttk.Label(popup, text=message_prefix +"\n" + message_suffix, style="popup.TLabel", anchor='center', font=(self.font, 10))
     popup_message.pack(pady=10, padx=10)
-    
-    def on_yes_all():
-        popup.result = ("ALL")
-        popup.destroy()
 
     def on_yes():
         popup.result = ("YES")
@@ -423,15 +430,24 @@ def trigger_overwrite_popup(self, message):
     width = self.popup_button_image.width()
     height = self.popup_button_image.height()
 
-    # yes_all_btn = ttk.Button(popup, text="Yes to all", command=on_yes_all, style="popup.TButton", image=self.popup_button_image)
-    # yes_all_btn.place(x=10, y=130, width=self.popup_button_image.width(), height=self.popup_button_image.height())
+    # --------------------------------- CHECKBOX --------------------------------- #
+    popup_variable = tk.IntVar(value=0)
+    # checkbox = ttk.Checkbutton(popup, text="TEST", variable=popup_variable, style='Custom.TCheckbutton', command=lambda: self.handle_checkbox_toggle())
+    # checkbox.place(x=27, y=161)
+
+    # label = ttk.Label(popup, text="Do not ask again", style="Checkbox.TLabel")
+    # label.place(x=55, y=159)  
+
+    # ------------------------------------ YES ----------------------------------- #
 
     yes_btn = ttk.Button(popup, text="Yes", command=on_yes, style="TButton", image=self.popup_button_image, compound='center')
-    yes_btn.place(x=125, y=130, width=width, height=height)
+    yes_btn.place(x=178, y=150, width=width, height=height)
     yes_btn['takefocus'] = False
 
+    # ------------------------------------ NO ------------------------------------ #
+
     skip_btn = ttk.Button(popup, text="No", command=on_skip, style="TButton", image=self.popup_button_image, compound='center')
-    skip_btn.place(x=240, y=130, width=width, height=height)
+    skip_btn.place(x=291, y=150, width=width, height=height)
     skip_btn['takefocus'] = False
 
     # Force the popup to update its layout and dimensions
@@ -455,5 +471,5 @@ def trigger_overwrite_popup(self, message):
     popup.grab_set()
     popup.wait_window()
 
-    return popup.result
+    return popup.result, popup_variable.get()
 

@@ -58,25 +58,45 @@ class FFMPEG:
 
     def encode_to_hap(self, input_path, output_path, codec="hap_alpha", mode="scale", callback=None):
         width, height = self.get_video_dimensions(self, input_path)
+        invalid_width = False
+        invalid_height = False
 
-        new_width = self.round_up_to_nearest_four(width)
-        new_height = self.round_up_to_nearest_four(height)
+        #CHECK IF WIDTH AND HEIGHT ARE DIVISIBLE BY 4
+        if width%4 != 0:
+            invalid_width = True
+            width = self.round_up_to_nearest_four(width) 
 
+        if height%4 != 0:
+            invalid_height = True
+            height = self.round_up_to_nearest_four(height)
+
+        #TODO MOVE THIS TO APP
         if not os.path.exists(os.path.dirname(output_path)):
             os.makedirs(os.path.dirname(output_path))
 
         # Create the ffmpeg command
-        cmd = [
-            self.ffmpeg_bin,
-            '-i', input_path
-        ]
+        cmd = [self.ffmpeg_bin,'-i', input_path]
 
         if mode == "pad":
-            cmd.extend(['-vf', f'pad={new_width}:{new_height}:0:0:black'])
-        elif mode == "scale":
-            cmd.extend(['-vf', f'scale={new_width}:{new_height}'])
+            cmd.extend(['-vf', f'pad={width}:{width}:0:0:black'])
+        elif mode == "stretch":
+            cmd.extend(['-vf', f'scale={width}:{width}'])
+        # elif mode == "scale":
+        #     if invalid_width and invalid_height:
+        #         print("Invalid width and height")
+        #         cmd.extend(['-vf', f'scale={width}:{height}'])
+        #     elif invalid_width:
+        #         print("Invalid width")
+        #         cmd.extend(['-vf', f'scale={width}:-1'])
+        #     elif invalid_height:
+        #         print("Invalid height")
+        #         cmd.extend(['-vf', f'scale=-1:{height}'])
+        #     else:
+        #         print("Valid width and height")
+        #         cmd.extend(['-vf', f'scale=-1:-1'])
         else:
-            raise ValueError("Invalid mode. Please use 'pad' or 'scale'.")
+            raise ValueError("Invalid mode.")
+        
 
         cmd.extend([
             '-c:v', 'hap',
@@ -89,11 +109,8 @@ class FFMPEG:
         print(" ".join(cmd))
         process = subprocess.Popen(cmd, stderr=subprocess.PIPE, universal_newlines=True)
 
-        # stdout, stderr = process.communicate()
-        # if process.returncode != 0:
-        #     print(f"FFmpeg failed with error: {stderr}")
-        # else:
-        #     print(stdout)
+
+        # ----------------------------- PROGRESS CALLBACK ---------------------------- #
 
         duration_pattern = re.compile(r"Duration: (\d+:\d+:\d+\.\d+)")
         progress_pattern = re.compile(r"time=(\d+:\d+:\d+\.\d+)")

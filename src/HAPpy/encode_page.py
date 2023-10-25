@@ -73,15 +73,12 @@ def send_to_encoder(self, file_path):
             if current_file == file:
                 if not self.overwrite_all_files:
                     self.console.log(f"File already exists: {current_file}", "ENCODE")
-                    result = self.trigger_overwrite_popup()
-                    if result == "ALL":  # OVERWRITE ALL
-                        self.console.log(f"Overwriting all files", "ENCODE")
-                        self.overwrite_all_files = True
-                        # return True
-                    elif result == "YES":  # OVERWRITE
+                    result = self.trigger_overwrite_popup(path)
+                        # Do not ask again
+                    if result[0] == "YES":  # OVERWRITE
                         self.console.log(f"Overwriting file", "ENCODE")
-                        # return True
-                    elif result == "SKIP":  # DONT OVERWRITE
+                        return True
+                    elif result[0] == "SKIP":  # DONT OVERWRITE
                         self.console.log(f"Skipping file", "ENCODE")
                         return False
 
