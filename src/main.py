@@ -35,19 +35,3 @@ if __name__ == "__main__":
     # print(app.trigger_overwrite_popup("test"))
 
     root.mainloop()
-
-
-# from HAPpy.gui_class import GUI
-
-
-# root = TkinterDnD.Tk()
-# root.title(APPNAME)
-# root.geometry("800x600")
-# root.resizable(False, False)
-
-# gui = GUI(root)
-# gui.setup_constants()
-# gui.configure_styles()
-# gui.setup_ui()
-
-# root.mainloop()
