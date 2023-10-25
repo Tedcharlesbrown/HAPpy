@@ -5,7 +5,7 @@ import tkinter as tk
 from encode import Encoder
 from autopytoexe_path import resource_path
 
-class HAPPY:
+class ENCODER:
     def __init__(self, root, logger):
         self.root = root
         self.encode_queue = queue.Queue()

@@ -7,10 +7,12 @@ from autopytoexe_path import resource_path
 
 class Encoder:
     def __init__(self):
-        ffmpeg_folder = resource_path('FFMPEG')
+        ffmpeg_folder = resource_path('ffmpeg.exe')
+        self.ffmpeg_bin = resource_path("ffmpeg.exe")
+        self.ffprobe_bin = resource_path("ffprobe.exe")
 
-        self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
-        self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
+        # self.ffmpeg_bin = os.path.join(ffmpeg_folder, 'ffmpeg.exe')
+        # self.ffprobe_bin = os.path.join(ffmpeg_folder, 'ffprobe.exe')
         self.ffmpeg_version = None
         self.ffprobe_version = None
 

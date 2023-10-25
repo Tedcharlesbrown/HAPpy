@@ -13,39 +13,38 @@ def setup_constants(self):
     pass
 
 
-
 def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
-    self.bg = PhotoImage(file=resource_path("GUI/assets/background.png")) 
+    self.bg = PhotoImage(file=resource_path("background.png")) 
     self.background = ttk.Label(self.root, image = self.bg, border=0) 
     self.background.place(x = 0, y = 0)
     # ----------------------------------- INPUT -------------------------------`--- #
     # ------------------------- Select A File & Select A Folder ------------------------ #
-    self.setup_button(x=25, y=20, text="Select a file", option="INPUT_FILE", image_path="GUI/assets/Button_Medium.png")
-    self.setup_button(x=204, y=20, text="Select a folder", option="INPUT_FOLDER", image_path="GUI/assets/Button_Medium.png")
+    self.setup_button(x=25, y=20, text="Select a file", option="INPUT_FILE", image_path="Button_Medium.png")
+    self.setup_button(x=204, y=20, text="Select a folder", option="INPUT_FOLDER", image_path="Button_Medium.png")
     # --------------------------------- Tree View -------------------------------- #
-    self.setup_tree(x=25, y=80, tree_type="INPUT", image_path="GUI/assets/Tree_Input.png")
-    # self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="GUI/assets/Tree_Input.png")
+    self.setup_tree(x=25, y=80, tree_type="INPUT", image_path="Tree_Input.png")
+    # self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="Tree_Input.png")
     # ---------------------- Clear Selection & Remove Files ---------------------- #
-    self.setup_button(x=25, y=400, text="Clear selection", option="CLEAR_SELECTION", image_path="GUI/assets/Button_Medium.png")
-    self.setup_button(x=204, y=400, text="Remove files", option="REMOVE_FILES", image_path="GUI/assets/Button_Medium.png")
+    self.setup_button(x=25, y=400, text="Clear selection", option="CLEAR_SELECTION", image_path="Button_Medium.png")
+    self.setup_button(x=204, y=400, text="Remove files", option="REMOVE_FILES", image_path="Button_Medium.png")
     # -------------------------------- DESTINATION ------------------------------- #
     # --------------------------- Select A Destination --------------------------- #
-    self.setup_button(x=430, y=20, text="Select a destination", option="DESTINATION_FOLDER", image_path="GUI/assets/Button_Large.png")
+    self.setup_button(x=430, y=20, text="Select a destination", option="DESTINATION_FOLDER", image_path="Button_Large.png")
     # --------------------------------- Tree View -------------------------------- #
-    self.setup_tree(x=430, y=80, tree_type="OUTPUT", image_path="GUI/assets/Tree_Destination.png")
-    # self.setup_output_tree(x=430, y=80, width=350, height=40, image_path="GUI/assets/Tree_Destination.png")
+    self.setup_tree(x=430, y=80, tree_type="OUTPUT", image_path="Tree_Destination.png")
+    # self.setup_output_tree(x=430, y=80, width=350, height=40, image_path="Tree_Destination.png")
 
     # ---------------------------------- ENCODE ---------------------------------- #
     # encode_selected = partial(self.on_encode_click, True)
     # encode_all = partial(self.on_encode_click, False)
-    self.setup_button(x=25, y=540, text="Encode Selected   ",option="ENCODE_SELECTED", image_path="GUI/assets/Button_EncodeSelected.png")
-    self.setup_button(x=204, y=540, text="Encode All",option="ENCODE_ALL", image_path="GUI/assets/Button_EncodeAll.png")
-    # self.setup_encode_buttons(x=25,y=540,width=0,height=0,text="Encode Selected",func=encode_selected,image_path="GUI/assets/Button_EncodeSelected.png")
-    # self.setup_encode_buttons(x=204,y=540,width=0,height=0,text="Encode All",func=encode_all,image_path="GUI/assets/Button_EncodeAll.png")
+    self.setup_button(x=25, y=540, text="Encode Selected   ",option="ENCODE_SELECTED", image_path="Button_EncodeSelected.png")
+    self.setup_button(x=204, y=540, text="Encode All",option="ENCODE_ALL", image_path="Button_EncodeAll.png")
+    # self.setup_encode_buttons(x=25,y=540,width=0,height=0,text="Encode Selected",func=encode_selected,image_path="Button_EncodeSelected.png")
+    # self.setup_encode_buttons(x=204,y=540,width=0,height=0,text="Encode All",func=encode_all,image_path="Button_EncodeAll.png")
 
     # ------------------------------- PROGRESS BAR ------------------------------- #
-    self.setup_progressbar(25,480,350,40,image_path="GUI/assets/progressbar.png")
+    self.setup_progressbar(25,480,350,40,image_path="progressbar.png")
 
 
     # ---------------------------- CHECKBOX VARIABLES ---------------------------- #
@@ -69,7 +68,7 @@ def setup_ui(self):
     #                               ADVANCED OPTIONS                               #
     # ---------------------------------------------------------------------------- #
 
-    self.advanced_options_image = tk.PhotoImage(file=resource_path("GUI/assets/AdvancedMenu.png"))
+    self.advanced_options_image = tk.PhotoImage(file=resource_path("AdvancedMenu.png"))
     self.advanced_options_bg = ttk.Label(self.root, image=self.advanced_options_image, borderwidth=0, style="TLabel")
     self.advanced_options_bg.place(x=430, y=310, width=self.advanced_options_image.width(), height=self.advanced_options_image.height())
     self.advanced_options_bg.image = self.advanced_options_image  # Keep a reference to the image to prevent garbage collection
@@ -105,21 +104,21 @@ def configure_styles(self):
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
     # ---------------------------------- IMAGES ---------------------------------- #
-    self.advanced_options_image = PhotoImage(file=resource_path("GUI/assets/AdvancedMenu.png"))
-    self.checkbox_on_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_on.png"))
-    self.checkbox_off_image = PhotoImage(file=resource_path("GUI/assets/Checkbox_off.png"))
-    self.radio_on_image = PhotoImage(file=resource_path("GUI/assets/radio_on.png"))
-    self.radio_off_image = PhotoImage(file=resource_path("GUI/assets/radio_off.png"))
+    self.advanced_options_image = PhotoImage(file=resource_path("AdvancedMenu.png"))
+    self.checkbox_on_image = PhotoImage(file=resource_path("Checkbox_on.png"))
+    self.checkbox_off_image = PhotoImage(file=resource_path("Checkbox_off.png"))
+    self.radio_on_image = PhotoImage(file=resource_path("radio_on.png"))
+    self.radio_off_image = PhotoImage(file=resource_path("radio_off.png"))
     # -------------------------------- BACKGROUND -------------------------------- #
     style = ttk.Style()
     self.style = ttk.Style()
     style.theme_use("default")
     style.layout('Custom.TCheckbutton', [('Checkbutton.label', {'sticky': 'nswe'})])
     style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
-    self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf")
-    self.font_bold = self.load_font("GUI/assets/LiberationSans-Bold.ttf")
+    self.font = self.load_font("LiberationSans-Regular.ttf")
+    self.font_bold = self.load_font("LiberationSans-Bold.ttf")
     # ----------------------------------- ICON ----------------------------------- #
-    icon_photo = tk.PhotoImage(file=resource_path('GUI/assets/icon.png'))
+    icon_photo = tk.PhotoImage(file=resource_path('icon.png'))
     self.root.wm_iconphoto(False, icon_photo)
 
     # ---------------------------------------------------------------------------- #
@@ -478,7 +477,7 @@ def trigger_overwrite_popup(self, message):
     popup.geometry("350x180") 
     # popup.configure(bg="#1a1a1a")
 
-    self.popup_bg_image = tk.PhotoImage(file=resource_path("GUI/assets/Popup_Background.png"))
+    self.popup_bg_image = tk.PhotoImage(file=resource_path("Popup_Background.png"))
     popup_bg_label = tk.Label(popup, image=self.popup_bg_image, bd=0)
     popup_bg_label.place(x=0, y=0)
     popup.resizable(False, False)
@@ -505,7 +504,7 @@ def trigger_overwrite_popup(self, message):
         popup.result = ("SKIP")
         popup.destroy()
 
-    self.popup_button_image = tk.PhotoImage(file=resource_path("GUI/assets/Button_Small.png"))
+    self.popup_button_image = tk.PhotoImage(file=resource_path("Button_Small.png"))
     width = self.popup_button_image.width()
     height = self.popup_button_image.height()
 

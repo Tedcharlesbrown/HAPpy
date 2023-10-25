@@ -2,6 +2,5 @@ __pycache__/
 FFMPEG/ffmpeg.exe
 FFMPEG/ffplay.exe
 FFMPEG/ffprobe.exe
-.HAP-PY Log.csv
-Export/.HAPpy Log.csv
 Export/main.exe
+*.csv
