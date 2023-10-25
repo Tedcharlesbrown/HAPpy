@@ -118,6 +118,9 @@ def configure_styles(self):
     style.configure("TLabel", background=self.style_background, foreground="#FFFFFF")
     self.font = self.load_font("GUI/assets/LiberationSans-Regular.ttf")
     self.font_bold = self.load_font("GUI/assets/LiberationSans-Bold.ttf")
+    # ----------------------------------- ICON ----------------------------------- #
+    icon_photo = tk.PhotoImage(file=resource_path('GUI/assets/icon/icon_1024.png'))
+    self.root.wm_iconphoto(False, icon_photo)
 
     # ---------------------------------------------------------------------------- #
     #                                    BUTTONS                                   #
