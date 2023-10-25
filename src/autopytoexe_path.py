@@ -7,7 +7,7 @@ def resource_path(relative_path):
         relative_path = os.path.join("../GUI/assets", relative_path)
     elif relative_path.endswith(".exe"):
         relative_path = os.path.join("../FFMPEG", relative_path)
-    print(relative_path)
+    # print(relative_path)
     try:
         base_path = sys._MEIPASS
     except Exception:

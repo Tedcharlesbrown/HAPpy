@@ -2,7 +2,7 @@ import queue
 import threading
 import tkinter as tk
 
-from encode import Encoder
+from encode import FFMPEG
 from autopytoexe_path import resource_path
 
 class ENCODER:
@@ -10,33 +10,27 @@ class ENCODER:
         self.root = root
         self.encode_queue = queue.Queue()
         self.encode_lock = threading.Lock()
-        # self.codec_option = tk.StringVar()
 
         # Advanced Options
         self.advanced_options_widgets = {}
-        self.placement_configs = {}
 
         self.setup_constants()
         self.configure_styles()
         self.setup_ui()
-        self.acceptable_containers = [".mkv", ".mp4", ".mov", ".asf", ".avi", ".mxf", ".m2p", ".ps", ".ts", ".m2ts", ".mts", ".vob", ".evo", ".3gp", ".3g2", ".f4v", ".flv", ".ogv", ".ogx", ".webm", ".rmvb", ".divx", ".png", ".jpg", ".jpeg", ".tiff", ".svg"]
+        self.console = logger
+
         self.destination_path = ""
         self.parent_folder = ""
         self.elapsed_files = 1
         self.total_files = 0
-        self.console = logger
-
-
-
-        # Encoding
-        self.encoder = Encoder()
-        self.overwrite_all_files = False
 
         # Progress bar
         self.progress_bar_update = True
         self.progress_bar_next_update = 25
 
-        
+        # Encoding
+        self.encoder = FFMPEG()
+        self.overwrite_all_files = False
 
         
 

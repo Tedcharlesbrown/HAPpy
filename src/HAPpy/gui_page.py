@@ -10,7 +10,15 @@ from autopytoexe_path import resource_path
 # ---------------------------------------------------------------------------- #
 
 def setup_constants(self):
-    pass
+    self.acceptable_containers = [".mkv", ".mp4", ".mov", ".asf", ".avi", ".mxf", ".m2p", ".ps", ".ts", ".m2ts", ".mts", ".vob", ".evo", ".3gp", ".3g2", ".f4v", ".flv", ".ogv", ".ogx", ".webm", ".rmvb", ".divx", ".png", ".jpg", ".jpeg", ".tiff", ".svg"]
+
+    self.style_background = '#1d1d1d'
+    self.style_progressbar_background = '#333333'
+    self.style_tree_background = '#2d2d2d'
+    self.style_button_background = "#2d2d2d"
+    self.style_button_foreground = "#FFFFFF"
+    self.style_button_pressed = "#444444"
+    self.style_button_active = "#5E5E5E"
 
 
 def setup_ui(self):
@@ -24,7 +32,6 @@ def setup_ui(self):
     self.setup_button(x=204, y=20, text="Select a folder", option="INPUT_FOLDER", image_path="Button_Medium.png")
     # --------------------------------- Tree View -------------------------------- #
     self.setup_tree(x=25, y=80, tree_type="INPUT", image_path="Tree_Input.png")
-    # self.setup_tree_input(x=25, y=80, width=349, height=295, image_path="Tree_Input.png")
     # ---------------------- Clear Selection & Remove Files ---------------------- #
     self.setup_button(x=25, y=400, text="Clear selection", option="CLEAR_SELECTION", image_path="Button_Medium.png")
     self.setup_button(x=204, y=400, text="Remove files", option="REMOVE_FILES", image_path="Button_Medium.png")
@@ -33,15 +40,11 @@ def setup_ui(self):
     self.setup_button(x=430, y=20, text="Select a destination", option="DESTINATION_FOLDER", image_path="Button_Large.png")
     # --------------------------------- Tree View -------------------------------- #
     self.setup_tree(x=430, y=80, tree_type="OUTPUT", image_path="Tree_Destination.png")
-    # self.setup_output_tree(x=430, y=80, width=350, height=40, image_path="Tree_Destination.png")
 
     # ---------------------------------- ENCODE ---------------------------------- #
-    # encode_selected = partial(self.on_encode_click, True)
-    # encode_all = partial(self.on_encode_click, False)
     self.setup_button(x=25, y=540, text="Encode Selected   ",option="ENCODE_SELECTED", image_path="Button_EncodeSelected.png")
     self.setup_button(x=204, y=540, text="Encode All",option="ENCODE_ALL", image_path="Button_EncodeAll.png")
-    # self.setup_encode_buttons(x=25,y=540,width=0,height=0,text="Encode Selected",func=encode_selected,image_path="Button_EncodeSelected.png")
-    # self.setup_encode_buttons(x=204,y=540,width=0,height=0,text="Encode All",func=encode_all,image_path="Button_EncodeAll.png")
+
 
     # ------------------------------- PROGRESS BAR ------------------------------- #
     self.setup_progressbar(25,480,350,40,image_path="progressbar.png")
@@ -93,16 +96,6 @@ def load_font(self, font_path, size=12):
         return font_name
 
 def configure_styles(self):
-    # ---------------------------------------------------------------------------- #
-    #                                   VARIABLES                                  #
-    # ---------------------------------------------------------------------------- #
-    self.style_background = '#1d1d1d'
-    self.style_progressbar_background = '#333333'
-    self.style_tree_background = '#2d2d2d'
-    self.style_button_background = "#2d2d2d"
-    self.style_button_foreground = "#FFFFFF"
-    self.style_button_pressed = "#444444"
-    self.style_button_active = "#5E5E5E"
     # ---------------------------------- IMAGES ---------------------------------- #
     self.advanced_options_image = PhotoImage(file=resource_path("AdvancedMenu.png"))
     self.checkbox_on_image = PhotoImage(file=resource_path("Checkbox_on.png"))
@@ -231,31 +224,6 @@ def setup_button(self, x, y, text, option, image_path=None):
         self.button["command"] = partial(self.on_encode_click, False)
     else:
         raise ValueError("Invalid argument. Please use 'INPUT_FILE', 'INPUT_FOLDER', 'DESTINATION_FOLDER', 'CLEAR_SELECTION', 'REMOVE_FILES', 'ENCODE_SELECTED', or 'ENCODE_ALL'.")
-    
-
-    # self.button.bind('<Button-1>', func)
-
-
-
-    # ---------------------------------------------------------------------------- #
-    #                                ENCODE BUTTONS                                #
-    # ---------------------------------------------------------------------------- #
-
-# def setup_encode_buttons(self, x, y, width, height, text, func, image_path=None):
-#         if image_path:
-#             self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-#             # Retrieve the width and height from the image
-#             width = self.image.width()
-#             height = self.image.height()
-#         else:
-#             self.image = None
-        
-#         self.button_encode = ttk.Button(self.root, text=text, style="TButton", command=func, image=self.image)
- 
-#         if self.image:
-#             self.button_encode.image = self.image  # Keep a reference to prevent garbage collection
-
-#         self.button_encode.place(x=x, y=y)
 
 # ---------------------------------------------------------------------------- #
 #                                  INPUT TREE                                  #
@@ -292,59 +260,6 @@ def setup_tree(self, x, y, tree_type="INPUT", image_path=None):
         self.destination_label.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
     else:
         raise ValueError("tree_type must be 'INPUT' or 'OUTPUT'")
-
-
-
-# def setup_tree_input(self, x, y, width, height, image_path=None):
-
-#     self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-#     # Retrieve the width and height from the image
-#     width = self.image.width()
-#     height = self.image.height()
-
-#     self.tree_input_image = tk.Label(self.root, image=self.image)
-#     self.tree_input_image.place(x=x, y=y, width=width, height=height)
-
-#     if self.image:
-#         self.tree_input_mage = self.image  # Keep a reference to prevent garbage collection
-
-#     offset = 6
-
-#     self.tree = ttk.Treeview(self.root)
-#     self.tree.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
-#     self.tree['show'] = 'tree'
-#     self.tree.drop_target_register(DND_FILES)
-#     # self.tree.dnd_bind('<<Drop>>', self.drop_to_treeview)  # Bind the Drop event
-#     self.tree.dnd_bind('<<Drop>>', lambda e: self.display_input_tree(e.data))  # Bind the Drop event
-
-#     self.drag_prompt_id = self.tree.insert("", "end", text="Drop source file / folder here")
-
-
-#     # ---------------------------------------------------------------------------- #
-#     #                                  OUTPUT TREE                                 #
-#     # ---------------------------------------------------------------------------- #
-
-# def setup_output_tree(self, x, y, width, height, image_path=None):
-
-#     self.image = tk.PhotoImage(file=resource_path(image_path))  # Load the image using tk.PhotoImage
-#     # Retrieve the width and height from the image
-#     width = self.image.width()
-#     height = self.image.height()
-
-
-#     self.tree_output_image = tk.Label(self.root, image=self.image)
-#     self.tree_output_image.place(x=x, y=y, width=width, height=height)
-
-#     if self.image:
-#         self.tree_output_image = self.image  # Keep a reference to prevent garbage collection
-
-#     offset = 6
-
-#     self.destination_label = ttk.Label(self.root, text="Drop destination folder here", wraplength=366, style="Destination.TLabel", anchor="nw") #nw
-#     self.destination_label.place(x=x + (offset / 2), y=y + (offset / 2), width=width - offset, height=height - offset)
-#     self.destination_label.drop_target_register(DND_FILES)
-#     self.destination_label.dnd_bind('<<Drop>>', lambda e: self.display_destination_folder(e.data))
-#     # self.destination_label.bind('<Button-1>', self.open_folder_dialog)
 
 # ---------------------------------------------------------------------------- #
 #                                 PROGRESS BAR                                 #
