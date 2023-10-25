@@ -1,4 +1,7 @@
 # HAPpy: HAP Video Encoding Tool
+<img src="https://github.com/Tedcharlesbrown/HAPpy/blob/main/GUI/assets/icon.png?raw=true" alt="HAPpy Icon" width="200"/>
+
+
 [![License](https://img.shields.io/badge/Uses-FFmpeg-%23007808?logo=FFmpeg)](http://ffmpeg.org)
 [![FFmpeg](https://img.shields.io/badge/License-GNU3.0-%23A42E2B?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html#license-text)
 

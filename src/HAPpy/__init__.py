@@ -37,6 +37,17 @@ class HAPpy:
 
     # TODO import via "from . import gui_page, filehandler_page, encode_page" - Requires changing how the functions are called
 
-    from .gui_page import setup_constants, setup_ui, setup_ui_encode, load_font, configure_styles, setup_button, setup_tree, setup_progressbar, setup_checkboxes, setup_radio, update_progress_text, console_log_progress, trigger_overwrite_popup, handle_checkbox_toggle
+    from .gui_page import setup_constants, setup_ui, load_font, configure_styles, setup_button, setup_tree, setup_progressbar, setup_checkboxes, setup_radio, update_progress_text, console_log_progress, trigger_overwrite_popup, handle_checkbox_toggle
     from .filehandler_page import open_file_or_folder_dialog, handle_input_drop, display_input_tree, populate_file_tree, display_destination_folder, gather_files_for_encode, clear_selection, remove_file_from_tree, check_file_tree
     from .encode_page import on_encode_click, send_to_encoder, encoder_worker, run_encoder
+
+
+# class Player(HAPpy):
+#     def __init__(self, root):
+#         self.root = root
+#         super().setup_constants()
+#         super().configure_styles()
+    
+
+
+#     from .gui_page import setup_player

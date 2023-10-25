@@ -21,17 +21,7 @@ def setup_constants(self):
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
 
-def setup_ui(self, option):
-
-
-
-    if option:
-        self.setup_ui_encode()
-    else:
-        pass
-
-
-def setup_ui_encode(self):
+def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
     self.bg = PhotoImage(file=resource_path("background.png")) 
     self.background = ttk.Label(self.root, image = self.bg, border=0) 
@@ -473,3 +463,25 @@ def trigger_overwrite_popup(self, message):
 
     return popup.result, popup_variable.get()
 
+
+
+
+
+
+# ---------------------------------------------------------------------------- #
+#                                    PLAYER                                    #
+# ---------------------------------------------------------------------------- #
+
+def setup_player(self):
+    def drop(event):
+        file_path = event.data
+        print(f"File dropped: {file_path}")
+        label.config(text=f"File dropped:\n{file_path}")
+
+    # Create a label to display the file path of the dropped file
+    label = tk.Label(self.root, text="Drag and drop a file here", padx=10, pady=10)
+    label.pack(pady=150, expand=True)
+
+    # Bind the drop event to the label
+    label.drop_target_register(DND_FILES)
+    label.dnd_bind('<<Drop>>', drop)

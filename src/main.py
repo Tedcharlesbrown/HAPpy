@@ -2,6 +2,8 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from HAPpy import HAPpy
 from console_log import Logger
 
+# from HAPpy import Player
+
 # -vf "scale=1280:720" -fast -infbuf -framedrop
 
 # ---------------------------------------------------------------------------- #
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     console = Logger(f".{APPNAME} Log.csv")
     console.set_header("TIME,TYPE,MESSAGE")
     app = HAPpy(root, console)
-    app.setup_ui(True)
+    app.setup_ui()
 
     result = console.create_log()
 
