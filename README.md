@@ -14,7 +14,7 @@ HAPpy is a video encoding tool that wraps FFmpeg into a graphical user interface
 
 ## Getting Started
 ### Installation
-1. Navigate to the Releases section of the HAPpy GitHub repository.
+1. Navigate to the [Releases](https://github.com/tedcharlesbrown/HAPpy/releases/latest) section of the HAPpy GitHub repository.
 2. Download the latest .exe release.
 3. Run the downloaded .exe file to launch the HAPpy application.
 
