@@ -472,16 +472,16 @@ def trigger_overwrite_popup(self, message):
 #                                    PLAYER                                    #
 # ---------------------------------------------------------------------------- #
 
-def setup_player(self):
-    def drop(event):
-        file_path = event.data
-        print(f"File dropped: {file_path}")
-        label.config(text=f"File dropped:\n{file_path}")
+# def setup_player(self):
+#     def drop(event):
+#         file_path = event.data
+#         print(f"File dropped: {file_path}")
+#         label.config(text=f"File dropped:\n{file_path}")
 
-    # Create a label to display the file path of the dropped file
-    label = tk.Label(self.root, text="Drag and drop a file here", padx=10, pady=10)
-    label.pack(pady=150, expand=True)
+#     # Create a label to display the file path of the dropped file
+#     label = tk.Label(self.root, text="Drag and drop a file here", padx=10, pady=10)
+#     label.pack(pady=150, expand=True)
 
-    # Bind the drop event to the label
-    label.drop_target_register(DND_FILES)
-    label.dnd_bind('<<Drop>>', drop)
+#     # Bind the drop event to the label
+#     label.drop_target_register(DND_FILES)
+#     label.dnd_bind('<<Drop>>', drop)
