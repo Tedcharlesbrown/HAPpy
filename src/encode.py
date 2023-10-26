@@ -20,12 +20,14 @@ class FFMPEG:
 
         # Check if the specified ffmpeg.exe file exists
         if os.path.exists(ffmpeg_folder):
+            # ---------------------------------- FFMPEG ---------------------------------- #
             try:
                 self.ffmpeg_version = subprocess.run([self.ffmpeg_bin, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 self.ffmpeg_version = self.ffmpeg_version.stdout.decode('utf-8').splitlines()[0]
                 # print(self.ffmpeg_version)
             except subprocess.CalledProcessError as e:
                 print("ERROR")
+            # ---------------------------------- FFPROBE --------------------------------- #
             try:
                 self.ffprobe_version = subprocess.run([self.ffprobe_bin, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 self.ffprobe_version = self.ffprobe_version.stdout.decode('utf-8').splitlines()[0]
