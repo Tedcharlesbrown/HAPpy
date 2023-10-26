@@ -45,8 +45,8 @@ HAPpy is a video encoding tool that wraps FFmpeg into a graphical user interface
 - All resolutions should be divisible by 4 in both width and height.
   - The HAP codec must be divisible by 4, if the input video is not divisible by 4 in either direction - this app will either stretch or pad the output video to conform to that standard. (Changeable in the advanced settings)
 
-## Why not NotchLC?
-Besides my personal preference for HAP (more layers and better performance at the trade off of slightly less quality)... NotchLC is a proprietary codec and has no plans on being shared outside of Notch and their own Media Encoder plugin. This means that in cannot be used in open source programs such as this one or FFmpeg. [Notch has made it clear that they are not interested in open sourcing their codec](https://forum.notch.one/t/command-line-encode-utility/851/13). If this is something you need, and as it becomes more difficult to encode to NotchLC due to Adobe / Apple's silicone, I would recommend contacting Notch.
+## Why not NotchLC or DXV?
+NotchLC and DXV are a proprietary codecs and has no plans on being shared outside of Notch and their own Media Encoder plugin. This means that in cannot be used in open source programs such as this one or FFmpeg. If this is something you need, and as it becomes more difficult to encode to NotchLC or DXV due to Adobe / Apple's silicone, I would recommend contacting Notch or Resolume.
 
 ## License
 This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the [GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text) and its source can be downloaded [here](https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-2023-10-18-git-e7a6bba51a-full_build.7z) from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
