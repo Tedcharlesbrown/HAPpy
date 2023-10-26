@@ -2,11 +2,18 @@
 find /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app -name .DS_Store -type l -delete
 
 # SIGN
-codesign --deep --force --verbose --sign "Developer ID Application: Ted Charles Brown" /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+codesign --deep --force --verbose --sign "Developer ID Application: Ted Charles Brown" /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy
 # REMOVE SIGNATURE
-codesign --remove-signature /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+codesign --remove-signature /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy
 # VERIFY SIGNATURE
-codesign --verify --verbose=4 /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+codesign --verify --verbose=4 /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy
+
+# NOTORIZATION
+xcrun altool --notarize-app --primary-bundle-id "com.tedcharlesbrown.HAPpy" --username "tedcharlesbrown@gmail.com" --password "" --file /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy
+
+# CHECK NOTORIZATION STATUS
+xcrun altool --notarization-info YOUR_REQUEST_UUID --username "tedcharlesbrown@gmail.com" --password ""
+
 
 # --onefile --noconfirm --noconsole
 pyinstaller --noconfirm --noconsole --onefile \

@@ -7,3 +7,5 @@ Export/main.exe
 Export/HAPpy/
 Export/*.exe
 .DS_Store
+Export/HAPpy
+.secrets
