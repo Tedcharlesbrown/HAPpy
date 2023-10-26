@@ -21,6 +21,12 @@ def setup_constants(self):
     self.style_button_pressed = "#444444"
     self.style_button_active = "#5E5E5E"
 
+    # '#a70f8a' # OUTER BACKGROUND - PINK
+    # '#ffb062' # OUTER FOREGROUND - ORANGE
+
+    # '#590667' # INNER BACKGROUND - PURPLE
+    # '#11fcc5' # INNER FOREGROUND - CYAN
+
 def setup_ui(self):
     # -------------------------------- BACKGROUND -------------------------------- #
     self.bg = PhotoImage(file=resource_path("background.png")) 
