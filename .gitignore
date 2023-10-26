@@ -6,3 +6,4 @@ Export/main.exe
 *.csv
 Export/HAPpy/
 Export/*.exe
+.DS_Store

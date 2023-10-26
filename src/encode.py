@@ -5,11 +5,15 @@ import ffmpeg  # ffmpeg-python
 
 from autopytoexe_path import resource_path
 
+import sys
+
+
 class FFMPEG:
     def __init__(self):
-        ffmpeg_folder = resource_path('ffmpeg.exe')
-        self.ffmpeg_bin = resource_path("ffmpeg.exe")
-        self.ffprobe_bin = resource_path("ffprobe.exe")
+        exstension = ".exe" if sys.platform == "win32" else ""
+        ffmpeg_folder = resource_path('', False)
+        self.ffmpeg_bin = resource_path("ffmpeg" + exstension, False)
+        self.ffprobe_bin = resource_path("ffprobe" + exstension, False)
 
         self.ffmpeg_version = None
         self.ffprobe_version = None
@@ -78,9 +82,9 @@ class FFMPEG:
         cmd = [self.ffmpeg_bin,'-i', input_path]
 
         if mode == "pad":
-            cmd.extend(['-vf', f'pad={width}:{width}:0:0:black'])
+            cmd.extend(['-vf', f'pad={width}:{height}:0:0:black'])
         elif mode == "stretch":
-            cmd.extend(['-vf', f'scale={width}:{width}'])
+            cmd.extend(['-vf', f'scale={width}:{height}'])
         # elif mode == "scale":
         #     if invalid_width and invalid_height:
         #         print("Invalid width and height")
