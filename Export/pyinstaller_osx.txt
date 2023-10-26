@@ -1,0 +1,20 @@
+# REMOVE .DS STORE
+find /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app -name .DS_Store -type l -delete
+
+# SIGN
+codesign --deep --force --verbose --sign "Developer ID Application: Ted Charles Brown" /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+# REMOVE SIGNATURE
+codesign --remove-signature /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+# VERIFY SIGNATURE
+codesign --verify --verbose=4 /Users/tcb_mini/Documents/GitHub/HAPpy/Export/HAPpy.app
+
+# --onefile --noconfirm --noconsole
+pyinstaller --noconfirm --noconsole --onefile \
+--icon "/Users/tcb_mini/Documents/GitHub/HAPpy/GUI/assets/icon.icns" \
+--name "HAPpy" \
+--add-binary "/Users/tcb_mini/Documents/GitHub/HAPpy/FFMPEG/ffmpeg:FFMPEG" \
+--add-binary "/Users/tcb_mini/Documents/GitHub/HAPpy/FFMPEG/ffprobe:FFMPEG" \
+--add-data "/Users/tcb_mini/Documents/GitHub/HAPpy/GUI/Assets:GUI/assets" \
+--add-data "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/tkinterdnd2:tkinterdnd2/" \
+--distpath "/Users/tcb_mini/Documents/GitHub/HAPpy/Export" \
+"/Users/tcb_mini/Documents/GitHub/HAPpy/src/main.py"

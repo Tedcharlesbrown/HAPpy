@@ -1,4 +1,4 @@
-from tkinterdnd2 import DND_FILES, TkinterDnD
+from tkinterdnd2 import DND_FILES, TkinterDnD #pip install tkinterdnd2
 from HAPpy import HAPpy
 from console_log import Logger
 
@@ -10,7 +10,7 @@ from console_log import Logger
 #                                   CONSTANTS                                  #
 # ---------------------------------------------------------------------------- #
 APPNAME =  "HAPpy"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 # ---------------------------------------------------------------------------- #
 #                                     MAIN                                     #
 # ---------------------------------------------------------------------------- #
@@ -29,11 +29,10 @@ if __name__ == "__main__":
     result = console.create_log()
 
     if not result:
+        pass
         console.log(app.encoder.get_version("ffmpeg"), "INIT")
         console.log(app.encoder.get_version("ffprobe"), "INIT")
 
     console.log(f"{APPNAME} v{VERSION} started", "INIT")
-
-    # print(app.trigger_overwrite_popup("test"))
 
     root.mainloop()
