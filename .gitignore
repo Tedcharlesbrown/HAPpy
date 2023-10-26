@@ -9,3 +9,4 @@ Export/*.exe
 .DS_Store
 Export/HAPpy
 .secrets
+Export/HAPpy.app

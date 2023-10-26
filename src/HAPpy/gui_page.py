@@ -1,8 +1,8 @@
+import os
 import tkinter as tk
 from tkinter import ttk,PhotoImage, font
 from functools import partial
 from tkinterdnd2 import DND_FILES, TkinterDnD
-import os
 
 from autopytoexe_path import resource_path
 
