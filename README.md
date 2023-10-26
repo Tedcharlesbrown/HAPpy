@@ -71,4 +71,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 If you find this software useful, please consider buying me a coffee.
 
 [![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-%23003087?logo=paypal)](https://paypal.me/tedcharlesbrown?country.x=US&locale.x=en_US)
-[![Donate with Venmo](https://img.shields.io/badge/Donate-Venmo-%23008CFF?logo=venmo)](https://paypal.me/tedcharlesbrown?country.x=US&locale.x=en_US)
+[![Donate with Venmo](https://img.shields.io/badge/Donate-Venmo-%23008CFF?logo=venmo)](https://account.venmo.com/u/TedCharlesBrown)
