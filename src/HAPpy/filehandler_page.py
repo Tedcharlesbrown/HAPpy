@@ -54,13 +54,13 @@ def display_input_tree(self, path):
     if self.tree.exists(self.drag_prompt_id):
         self.tree.delete(self.drag_prompt_id)
 
-
     # ----------------- CHECK IF PATH EXISTS ----------------- #
     for item in self.tree.get_children():
         item_value = self.tree.item(item, 'values')
-        if path in item_value:
-            print(f"Path {path} already exists in the tree. Skipping...") #TODO This only works with single files
-            # return
+        if os.path.basename(path) in os.path.basename(str(item_value)):
+            filename = os.path.basename(path)
+            print(f"Path {filename} already exists in the tree. Skipping...") #TODO This only works with single files
+            return
 
     # -------------------------- CHECK IF FILE OR FOLDER ------------------------- #
     # If the path is a directory, create a top-level parent node for the directory
