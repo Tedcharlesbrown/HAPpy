@@ -10,7 +10,6 @@ def resource_path(relative_path, is_asset=True):
     
     try:
         base_path = sys._MEIPASS
-        print("BASE PATH:", base_path)
         return os.path.join(base_path, relative_path)
     except Exception:
         base_path = os.path.abspath(".")
