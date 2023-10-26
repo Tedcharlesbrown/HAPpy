@@ -29,9 +29,9 @@ HAPpy is a video encoding tool that wraps FFmpeg into a graphical user interface
   - Append HAP to version name *preserves version tags*
   - Advanced Options
     - Choose between `HAP`, `HAP ALPHA`, and `HAP Q`
-    - Sizing, `SCALE` and `PAD`
+    - Sizing, `Stretch` and `Pad`
       - The HAP codec must be divisible by 4
-      - If the input video is not divisible by 4, the input will be scaled up or padded with black
+      - If the input video is not divisible by 4, the input will be stretched up or padded with black
     - Create Proxys **NOT YET IMPLEMENTED**
       - Will create 4 proxys at `1/2`, `1/4`, `1/8`, and `1/16` resolutions
 
@@ -39,6 +39,11 @@ HAPpy is a video encoding tool that wraps FFmpeg into a graphical user interface
 ## Why HAPpy?
 - HAPpy provides a straightforward way to encode videos to the HAP format without the need to download and install other alternatives.
 - HAPpy contains a pre-compiled version of FFmpeg with HAP included - so no searching for the correct version and no setting PATH variables.
+
+## Warning!
+- Use at your own risk. While this is a wrapper of FFmpeg, it has its limitations that comes with that.
+- All resolutions should be divisible by 4 in both width and height.
+  - The HAP codec must be divisible by 4, if the input video is not divisible by 4 in either direction - this app will either stretch or pad the output video to conform to that standard. (Changeable in the advanced settings)
 
 ## Why not NotchLC?
 Besides my personal preference for HAP (more layers and better performance at the trade off of slightly less quality)... NotchLC is a proprietary codec and has no plans on being shared outside of Notch and their own Media Encoder plugin. This means that in cannot be used in open source programs such as this one or FFmpeg. [Notch has made it clear that they are not interested in open sourcing their codec](https://forum.notch.one/t/command-line-encode-utility/851/13). If this is something you need, and as it becomes more difficult to encode to NotchLC due to Adobe / Apple's silicone, I would recommend contacting Notch.
@@ -64,8 +69,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 ## Special Thanks / Acknowledgments
 [FFmpeg](https://github.com/FFmpeg/FFmpeg) - FFmpeg is a trademark of Fabric Bellard  
 [Vidvox](https://github.com/Vidvox/hap) - Created HAP codec, originally written by Tom Butterworth and commissioned by VIDVOX, 2012.
-
-
 
 ## Support the project
 If you find this software useful, please consider buying me a coffee.
