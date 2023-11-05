@@ -11,8 +11,6 @@ from tkinterdnd2 import DND_FILES, TkinterDnD #pip install tkinterdnd2
 from HAPpy import HAPpy
 from console_log import Logger
 
-# from HAPpy import Player
-
 # -vf "scale=1280:720" -fast -infbuf -framedrop
 
 # ---------------------------------------------------------------------------- #

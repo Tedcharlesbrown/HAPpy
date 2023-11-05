@@ -8,6 +8,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 import os
 import subprocess
+import json
 import re
 import ffmpeg  # ffmpeg-python
 
@@ -22,9 +23,11 @@ class FFMPEG:
         ffmpeg_folder = resource_path('', False)
         self.ffmpeg_bin = resource_path("ffmpeg" + exstension, False)
         self.ffprobe_bin = resource_path("ffprobe" + exstension, False)
+        self.ffplay_bin = resource_path("ffplay" + exstension, False)
 
         self.ffmpeg_version = None
         self.ffprobe_version = None
+        self.ffplay_version = None
 
         # Check if the specified ffmpeg.exe file exists
         if os.path.exists(ffmpeg_folder):
@@ -42,9 +45,17 @@ class FFMPEG:
                 # print(self.ffprobe_version)
             except subprocess.CalledProcessError as e:
                 print("ERROR")
+            # ---------------------------------- FFPLAY --------------------------------- #
+            try:
+                self.ffplay_version = subprocess.run([self.ffplay_bin, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.ffplay_version = self.ffplay_version.stdout.decode('utf-8').splitlines()[0]
+                # print(self.ffprobe_version)
+            except subprocess.CalledProcessError as e:
+                print("ERROR")
 
         ffmpeg._run.DEFAULT_FFMPEG_PATH = self.ffmpeg_bin
         ffmpeg._run.DEFAULT_FFPROBE_PATH = self.ffprobe_bin     
+        ffmpeg._run.DEFAULT_FFPLAY_PATH = self.ffplay_bin     
     
     def __str__(self):
         return f"FFmpeg version: {self.ffmpeg_version}\nFFprobe version: {self.ffprobe_version}"
@@ -54,8 +65,10 @@ class FFMPEG:
             return self.ffmpeg_version
         elif exe == "ffprobe":
             return self.ffprobe_version
+        elif exe == "ffplay":
+            return self.ffplay_version
         else:
-            raise ValueError("Invalid argument. Please use 'ffmpeg' or 'ffprobe'.")
+            raise ValueError("Invalid argument.")
 
     @staticmethod
     def get_video_dimensions(self, input_path):
@@ -147,3 +160,39 @@ class FFMPEG:
         if callback:
             callback(100.0)
             return cmd, True
+
+
+
+    # def play(self, input_path):
+    #     # Define the additional arguments as a list
+    #     additional_args = ['-vf', 'scale=1280:720', '-fast', '-infbuf', '-framedrop']
+        
+    #     # Construct the complete command by adding the input path
+    #     cmd = [self.ffplay_bin] + additional_args + [input_path]
+
+    #     # Start the process
+    #     process = subprocess.Popen(cmd, stderr=subprocess.PIPE, universal_newlines=True)
+    #     return process
+
+    def play(self, input_path):
+
+        additional_args = ['-vf', 'scale=1280:720', '-fast', '-infbuf', '-framedrop']
+        cmd = [self.ffplay_bin] + additional_args + [input_path]
+
+        process = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, bufsize=1)
+
+        return process
+    
+    def probe(self, input_path):
+        cmd = [
+            self.ffprobe_bin,
+            '-v', 'error',
+            '-show_entries', 'format=duration,bit_rate',
+            '-show_streams',
+            '-of', 'json',
+            input_path
+        ]
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        if result.returncode != 0:  # if ffprobe encountered an error
+            raise RuntimeError(result.stderr)
+        return json.loads(result.stdout)
