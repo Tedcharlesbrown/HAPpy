@@ -7,3 +7,9 @@ Export/main.exe
 Export/HAPpy/
 Export/*.exe
 .DS_Store
+Export/HAPpy
+.secrets
+Export/HAPpy.app
+Export/Build
+Export/dist
+*.pyc
