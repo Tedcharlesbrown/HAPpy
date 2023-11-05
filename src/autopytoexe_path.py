@@ -2,6 +2,7 @@ import sys
 import os
 
 def resource_path(relative_path, is_asset=True):
+    macos = False
     if sys.platform == 'darwin':
         macos = True
 
@@ -27,5 +28,4 @@ def resource_path(relative_path, is_asset=True):
             base_path = os.path.abspath(".")
             path = os.path.join(os.path.dirname(base_path), relative_path)
 
-        print(f"RELATIVE PATH: {relative_path}, BASE PATH: {base_path}, PATH: {path}")
         return path
