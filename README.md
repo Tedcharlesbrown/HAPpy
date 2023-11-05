@@ -54,21 +54,6 @@ This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the [GPLv3
 [Windows](https://github.com/GyanD/codexffmpeg/releases/tag/2023-10-18-git-e7a6bba51a) from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
 
 [Mac](https://evermeet.cx/pub/ffmpeg/snapshots/ffmpeg-112441-gc06d3d2404.zip) from [evermeet.cx](https://evermeet.cx/ffmpeg/)
- 
-    Copyright (C) 2023  Ted Charles Brown
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-<!-- You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 
 ## Special Thanks / Acknowledgments
 [FFmpeg](https://github.com/FFmpeg/FFmpeg) - FFmpeg is a trademark of Fabric Bellard  
