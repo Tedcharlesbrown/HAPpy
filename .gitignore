@@ -10,3 +10,6 @@ Export/*.exe
 Export/HAPpy
 .secrets
 Export/HAPpy.app
+Export/Build
+Export/dist
+*.pyc
