@@ -51,7 +51,9 @@ NotchLC and DXV are a proprietary codecs and has no plans on being shared outsid
 ## License
 This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the [GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text) and its source can be downloaded below
 
-- [Windows](https://github.com/GyanD/codexffmpeg/releases/tag/2023-10-18-git-e7a6bba51a) from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
+[Windows](https://github.com/GyanD/codexffmpeg/releases/tag/2023-10-18-git-e7a6bba51a) from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
+
+[Mac](https://evermeet.cx/pub/ffmpeg/snapshots/ffmpeg-112441-gc06d3d2404.zip) from [evermeet.cx](https://evermeet.cx/ffmpeg/)
  
     Copyright (C) 2023  Ted Charles Brown
 
