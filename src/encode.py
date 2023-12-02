@@ -165,7 +165,10 @@ class FFMPEG:
 	def play(self, input_path):
 
 		# additional_args = ['-vf', 'scale=800:-1', '-fast', '-infbuf', '-framedrop', "drawtext=text='Your Text Here':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2"]
+
 		additional_args = [
+			'-loop', '0',
+			# '-window_title', f'{os.path.basename(input_path)}',
 			'-vf',
 			"scale=800:-1",
 			'-fast',
