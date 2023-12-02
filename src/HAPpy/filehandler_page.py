@@ -80,7 +80,7 @@ def display_input_tree(self, path):
         if path.startswith("{") and path.endswith("}"): # Copy pasted files have curly braces around them
             path = path[1:-1]
         filename = os.path.basename(path)
-        found_acceptable_extension = any(filename.endswith(container) for container in self.acceptable_containers)
+        found_acceptable_extension = any(filename.lower().endswith(container) for container in self.acceptable_containers)
 
         if found_acceptable_extension:
             self.console.log(f"Displaying {path} to the file tree", "FILE")
