@@ -75,8 +75,15 @@ class FFMPEG:
 		cmd = [self.ffprobe_bin, '-v', 'error', '-select_streams', 'v:0',
 			'-show_entries', 'stream=width,height', '-of', 'csv=p=0', input_path]
 		output = subprocess.check_output(cmd).decode('utf-8').strip()
-		width, height = map(int, output.split(','))
-		return width, height
+		clean_output = output.strip().rstrip(',')
+		print(f'Input Video Dimensions: {clean_output}')
+		try:
+			# Split the cleaned output and convert parts to integers
+			width, height = map(int, clean_output.split(','))
+			return width, height
+		except ValueError:
+			# Handle the case where conversion to integer fails
+			raise ValueError("Failed to extract video dimensions from output.")
 
 
 	@staticmethod
